@@ -1,6 +1,5 @@
 package com.emranhss.project.restcontroller;
 
-
 import com.emranhss.project.dto.DivisionResponseDTO;
 import com.emranhss.project.entity.Division;
 import com.emranhss.project.service.DivisionService;
@@ -11,8 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/division/")
+@RequestMapping("/api/division")
 public class DivisionRestController {
+
 
     @Autowired
     private DivisionService divisionService;
@@ -24,9 +24,13 @@ public class DivisionRestController {
         return ResponseEntity.ok(dtoList);
     }
 
+
+
+    @PostMapping("")
     public ResponseEntity<Division> createDivision(@RequestBody Division division){
         Division saved = divisionService.saveDivision(division);
 
         return ResponseEntity.ok(saved);
     }
+
 }

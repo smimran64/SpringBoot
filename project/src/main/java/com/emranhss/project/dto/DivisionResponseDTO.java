@@ -1,13 +1,14 @@
 package com.emranhss.project.dto;
 
+import com.emranhss.project.entity.District;
+
 import java.util.List;
 
 public class DivisionResponseDTO {
 
-
     private int id;
     private String name;
-    private List<Integer> districts; //for districts id
+    private List<Integer>districts;
 
     public int getId() {
         return id;
