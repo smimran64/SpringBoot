@@ -3,17 +3,27 @@ package com.emranhss.project.restcontroller;
 
 import com.emranhss.project.entity.User;
 import com.emranhss.project.service.UserService;
+<<<<<<< HEAD
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+=======
+>>>>>>> 7fb61327aaf490c488ec26c2bf20092d91e63e22
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
+=======
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+>>>>>>> 7fb61327aaf490c488ec26c2bf20092d91e63e22
 
 @RestController
 @RequestMapping("/api/user/")
@@ -23,6 +33,7 @@ public class UserRestController {
     @Autowired
     private UserService userService;
 
+<<<<<<< HEAD
     @PostMapping("")
     public ResponseEntity<Map<String, String>> saveUser(
 
@@ -55,4 +66,15 @@ public class UserRestController {
 
 
 
+=======
+    @PostMapping
+    public ResponseEntity<String> saveOrUpdate(@RequestBody User user){
+        try{
+            userService.saveOrUpdate(user);
+            return ResponseEntity.ok("Data saved");
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+>>>>>>> 7fb61327aaf490c488ec26c2bf20092d91e63e22
 }

@@ -22,6 +22,7 @@ public class UserService {
     @Autowired
     private IUserRepo userRepo;
 
+<<<<<<< HEAD
 
     @Autowired
     private EmailService emailService;
@@ -53,13 +54,37 @@ public class UserService {
         return userRepo.findById(id).get();
     }
 
+=======
+    @Autowired
+    private EmailService emailService;
+
+    public void saveOrUpdate(User user) {
+        userRepo.save(user);
+        sendActivationEmail(user);
+    }
+
+    public List<User> findAll() {
+        return userRepo.findAll();
+    }
+
+
+    public User findById(int id) {
+        return userRepo.findById(id).get();
+    }
+
+>>>>>>> 7fb61327aaf490c488ec26c2bf20092d91e63e22
     public void delete(User user) {
         userRepo.delete(user);
     }
 
+<<<<<<< HEAD
     private void sendActivationEmail(User user){
 
 
+=======
+
+    private void sendActivationEmail(User user) {
+>>>>>>> 7fb61327aaf490c488ec26c2bf20092d91e63e22
         String subject = "Welcome to Our Service – Confirm Your Registration";
 
         String mailText = "<!DOCTYPE html>"
@@ -98,6 +123,7 @@ public class UserService {
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send activation email", e);
         }
+<<<<<<< HEAD
 
     }
 
@@ -125,5 +151,7 @@ public class UserService {
         }
 
         return fileName;
+=======
+>>>>>>> 7fb61327aaf490c488ec26c2bf20092d91e63e22
     }
 }

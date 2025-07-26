@@ -60,6 +60,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		
 		<!-- https://mvnrepository.com/artifact/jakarta.mail/jakarta.mail-api -->
 		<dependency>
 			<groupId>jakarta.mail</groupId>
