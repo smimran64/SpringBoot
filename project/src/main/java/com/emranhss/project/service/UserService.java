@@ -22,7 +22,6 @@ public class UserService {
     @Autowired
     private IUserRepo userRepo;
 
-<<<<<<< HEAD
 
     @Autowired
     private EmailService emailService;
@@ -32,9 +31,9 @@ public class UserService {
 
     public void saveOrUpdate(User user, MultipartFile imageFile) {
 
-        if (imageFile != null && !imageFile.isEmpty()){
+        if (imageFile != null && !imageFile.isEmpty()) {
 
-            String fileName = saveImage(imageFile,user);
+            String fileName = saveImage(imageFile, user);
 
             user.setPhoto(fileName);
         }
@@ -46,45 +45,23 @@ public class UserService {
     }
 
     public List<User> findAll() {
+
         return userRepo.findAll();
     }
 
 
     public User findById(int id) {
+
         return userRepo.findById(id).get();
     }
 
-=======
-    @Autowired
-    private EmailService emailService;
-
-    public void saveOrUpdate(User user) {
-        userRepo.save(user);
-        sendActivationEmail(user);
-    }
-
-    public List<User> findAll() {
-        return userRepo.findAll();
-    }
-
-
-    public User findById(int id) {
-        return userRepo.findById(id).get();
-    }
-
->>>>>>> 7fb61327aaf490c488ec26c2bf20092d91e63e22
     public void delete(User user) {
         userRepo.delete(user);
     }
 
-<<<<<<< HEAD
-    private void sendActivationEmail(User user){
-
-
-=======
 
     private void sendActivationEmail(User user) {
->>>>>>> 7fb61327aaf490c488ec26c2bf20092d91e63e22
+
         String subject = "Welcome to Our Service – Confirm Your Registration";
 
         String mailText = "<!DOCTYPE html>"
@@ -123,35 +100,37 @@ public class UserService {
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send activation email", e);
         }
-<<<<<<< HEAD
+
 
     }
 
 
-    public String saveImage(MultipartFile file, User user){
+    public String saveImage(MultipartFile file, User user) {
 
-        Path uploadPath = Paths.get(uploadDir+"/users");
+        Path uploadPath = Paths.get(uploadDir + "/users");
 
-        if(!Files.exists(uploadPath)){
+        if (!Files.exists(uploadPath)) {
 
             try {
                 Files.createDirectory(uploadPath);
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        String fileName = file.getName()+"_"+ UUID.randomUUID().toString();
+        String fileName = file.getName() + "_" + UUID.randomUUID().toString();
 
-        Path filePath = uploadPath.resolve(fileName);
+
         try {
+            Path filePath = uploadPath.resolve(fileName);
             Files.copy(file.getInputStream(), filePath);
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
         return fileName;
-=======
->>>>>>> 7fb61327aaf490c488ec26c2bf20092d91e63e22
+
     }
 }

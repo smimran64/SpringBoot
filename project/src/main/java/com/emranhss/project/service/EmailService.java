@@ -14,34 +14,23 @@ public class EmailService {
 
 
     public EmailService(JavaMailSender javaMailSender) {
+
         this.javaMailSender = javaMailSender;
     }
 
-<<<<<<< HEAD
-    public void sendSimpleEmail(String to, String subject,String body ) throws MessagingException{
-        MimeMessage message = javaMailSender.createMimeMessage();
-        MimeMessageHelper helper = new MimeMessageHelper(message,true);
 
+    public void sendSimpleEmail(String to, String subject, String body) throws MessagingException {
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(body, true);
-=======
-    public  void sendSimpleEmail(String to, String subject, String body) throws MessagingException {
 
-        MimeMessage message=javaMailSender.createMimeMessage();
-        MimeMessageHelper helper=new MimeMessageHelper(message, true);
-        helper.setTo(to);
-        helper.setSubject(subject);
-        helper.setText(body,   true);
->>>>>>> 7fb61327aaf490c488ec26c2bf20092d91e63e22
 
         javaMailSender.send(message);
 
     }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 7fb61327aaf490c488ec26c2bf20092d91e63e22
 
 }
