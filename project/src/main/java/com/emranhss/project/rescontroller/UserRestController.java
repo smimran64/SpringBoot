@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/user/")
+@RequestMapping("/api/user")
 @CrossOrigin("*")
 public class UserRestController {
 

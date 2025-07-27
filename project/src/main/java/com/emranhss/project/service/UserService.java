@@ -107,7 +107,7 @@ public class UserService {
 
     public String saveImage(MultipartFile file, User user) {
 
-        Path uploadPath = Paths.get(uploadDir + "/users");
+        Path uploadPath = Paths.get(uploadDir + "/users/");
 
         if (!Files.exists(uploadPath)) {
 
