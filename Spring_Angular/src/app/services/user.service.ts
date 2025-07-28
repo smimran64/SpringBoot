@@ -9,13 +9,12 @@ import { User} from '../model/user.model';
 })
 export class UserService {
 
-  private baseUrl = environment.apiUrl + '/user';
+  private baseUrl = environment.apiUrl + '/user/';
 
   constructor(private http: HttpClient) {}
 
 
   getAllUsers(): Observable<User[]> {
-
     return this.http.get<User[]>(this.baseUrl);
   }
   
