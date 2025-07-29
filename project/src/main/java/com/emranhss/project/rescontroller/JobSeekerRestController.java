@@ -9,10 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
@@ -20,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/jobseeker")
+@CrossOrigin("*")
 public class JobSeekerRestController {
 
 
@@ -27,7 +25,7 @@ public class JobSeekerRestController {
     private UserService userService;
 
 
-
+    @PostMapping("")
     public ResponseEntity<Map<String, String>> registerJobSeeker(
             @RequestPart(value = "user") String userJson,
             @RequestPart(value = "jobseeker") String jobSeekerJson,
