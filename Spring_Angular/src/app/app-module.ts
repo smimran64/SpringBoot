@@ -5,15 +5,21 @@ import { AppRoutingModule } from './app-routing-module';
 import { App } from './app';
 import { AlluserComponent } from './user/alluser.component/alluser.component';
 import { provideHttpClient, withFetch } from '@angular/common/http';
+import { AddjobseekerComponent } from './jobseeker/addjobseeker.component/addjobseeker.component';
+import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     App,
-    AlluserComponent
+    AlluserComponent,
+    AddjobseekerComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule
+    
   ],
   providers: [
     provideBrowserGlobalErrorListeners(),
