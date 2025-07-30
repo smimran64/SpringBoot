@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/jobseeker")
+@RequestMapping("/api/jobseeker/")
 @CrossOrigin("*")
 public class JobSeekerRestController {
 
@@ -29,7 +29,7 @@ public class JobSeekerRestController {
     public ResponseEntity<Map<String, String>> registerJobSeeker(
             @RequestPart(value = "user") String userJson,
             @RequestPart(value = "jobseeker") String jobSeekerJson,
-            @RequestParam(value = "photo")MultipartFile file
+            @RequestParam(value = "photo",required = false)MultipartFile file
             ) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -39,14 +39,14 @@ public class JobSeekerRestController {
             userService.registerJobSeeker(user,file,jobSeeker);
             Map<String, String> response = new HashMap<>();
 
-            response.put("Message", "User registered successfully");
+            response.put("Message", "JobSeeker registered successfully");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         }  catch (Exception e) {
 
             Map<String, String> errorResponse = new HashMap<>();
 
-            errorResponse.put("Message","User Registration Failed");
+            errorResponse.put("Message","JobSeeker Registration Failed");
 
             return new ResponseEntity<>(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR);
 

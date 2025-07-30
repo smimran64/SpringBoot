@@ -38,7 +38,7 @@ export class AddjobseekerComponent {
 
 
   onPhotoSelected(event: any): void {
-    if (event.target.files && event.target.files.length > 0) {
+    if (event.target.files.length > 0) {
       this.photoFile = event.target.files[0];
 
       console.log('Selected photo:', this.photoFile);
@@ -63,7 +63,7 @@ export class AddjobseekerComponent {
       email: this.userForm.value.email,
       phone: this.userForm.value.phone,
       password: this.userForm.value.password,
-      role : 'jobseeker'
+      role : 'JOBSEEKER'
     };
 
     const jobseeker = {
@@ -87,7 +87,7 @@ export class AddjobseekerComponent {
       error: err => {
         this.message = 'Registration failed. Please try again.';+( err.error?.message || err.message);
       }
-    })
+    });
   }
 
 }

@@ -44,7 +44,7 @@ public class UserService {
         }
 
 
-        user.setRole(Role.JOBSEEKER);
+        user.setRole(Role.ADMIN);
         userRepo.save(user);
         sendActivationEmail(user);
 
@@ -113,7 +113,7 @@ public class UserService {
 
     public String saveImage(MultipartFile file, User user) {
 
-        Path uploadPath = Paths.get(uploadDir + "/users/");
+        Path uploadPath = Paths.get(uploadDir + "/users");
 
         if (!Files.exists(uploadPath)) {
 
@@ -146,7 +146,7 @@ public class UserService {
 
     public String saveImageForJobseeker(MultipartFile file, JobSeeker jobSeeker) {
 
-        Path uploadPath = Paths.get(uploadDir + "/jobseeker/");
+        Path uploadPath = Paths.get(uploadDir + "/jobseeker");
 
         if (!Files.exists(uploadPath)) {
             try {
