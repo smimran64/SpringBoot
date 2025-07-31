@@ -21,8 +21,8 @@ public class StudentService {
         return studentRepo.findAll();
     }
 
-    public Students getById(int id) {
-        return studentRepo.findById(id).orElse(null);
+    public Students getById(int roll) {
+        return studentRepo.findById(roll).orElse(null);
     }
 
 
@@ -31,8 +31,8 @@ public class StudentService {
         studentRepo.save(students);
     }
 
-    public void delete(int id) {
-        studentRepo.deleteById(id);
+    public void delete(int roll) {
+        studentRepo.deleteById(roll);
     }
 
 

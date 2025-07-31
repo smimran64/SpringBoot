@@ -13,16 +13,16 @@
 </head>
 <body>
 <div class="container">
-    <h1 style="text-align: center; background-color:black ; color: aliceblue; margin-top: 3px">View All Employee</h1>
+    <h1 style="text-align: center; background-color:black ; color: aliceblue; margin-top: 3px">View All Students</h1>
     <div class="container">
 
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>ID</th>
+                <th>Roll</th>
                 <th>Name</th>
-                <th>Email</th>
-                <th>Address</th>
+                <th>Marks</th>
+                <th>Subject</th>
                 <th>Action</th>
 
             </tr>
@@ -32,13 +32,13 @@
 
             <tbody>
             <tr th:each=" s: ${list}">
-                <td th:text="${s.id}"></td>
+                <td th:text="${s.roll}"></td>
                 <td th:text="${s.name}"></td>
-                <td th:text="${s.email}"></td>
-                <td th:text="${s.address}"></td>
+                <td th:text="${s.marks}"></td>
+                <td th:text="${s.subject}"></td>
                 <td>
-                    <a th:href="@{'/edit/' + ${s.id}}" class="btn btn-warning">Edit</a>
-                    <a th:href="@{'/delete/' + ${s.id}}" class="btn btn-danger">Delete</a>
+                    <a th:href="@{'/edit/' + ${s.roll}}" class="btn btn-warning">Edit</a>
+                    <a th:href="@{'/delete/' + ${s.roll}}" class="btn btn-danger">Delete</a>
 
                 </td>
 

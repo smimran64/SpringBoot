@@ -9,34 +9,34 @@ public class Students {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int roll;
     private String name;
-    private String email;
-    private String address;
+    private String marks;
+    private String subject;
 
 
     public Students() {
     }
 
-    public Students(int id, String name, String email, String address) {
-        this.id = id;
+    public Students(int roll, String name, String marks, String subject) {
+        this.roll = roll;
         this.name = name;
-        this.email = email;
-        this.address = address;
+        this.marks = marks;
+        this.subject = subject;
     }
 
-    public Students(String name, String email, String address) {
+    public Students(String name, String marks, String subject) {
         this.name = name;
-        this.email = email;
-        this.address = address;
+        this.marks = marks;
+        this.subject = subject;
     }
 
-    public int getId() {
-        return id;
+    public int getRoll() {
+        return roll;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setRoll(int roll) {
+        this.roll = roll;
     }
 
     public String getName() {
@@ -47,19 +47,19 @@ public class Students {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getMarks() {
+        return marks;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setMarks(String marks) {
+        this.marks = marks;
     }
 
-    public String getAddress() {
-        return address;
+    public String getSubject() {
+        return subject;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setSubject(String subject) {
+        this.subject = subject;
     }
 }

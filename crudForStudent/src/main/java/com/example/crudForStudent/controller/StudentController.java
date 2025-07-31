@@ -45,7 +45,7 @@ public class StudentController {
     @GetMapping("")
     public String getAllStudents(Model model) {
 
-        List <Students> list = studentService.getAll();
+        List<Students> list = studentService.getAll();
 
         model.addAttribute("list", list);
 
@@ -53,22 +53,22 @@ public class StudentController {
         return "home";
     }
 
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable int id, Model model) {
+    @GetMapping("/edit/{roll}")
+    public String edit(@PathVariable int roll, Model model) {
 
-        Students student = studentService.getById(id);
+        Students student = studentService.getById(roll);
         model.addAttribute("student", student);
-
 
 
         return "addStudent";
 
     }
 
-    @GetMapping("/delete/{id}")
-    public String delete(int id) {
-        studentService.delete(id);
+    @GetMapping("/delete/{roll}")
+    public String delete(@PathVariable int roll) {
+        studentService.delete(roll);
         return "redirect:/";
     }
+
 
 }
