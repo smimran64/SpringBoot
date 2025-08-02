@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { JobseekerService } from '../../services/jobseeker.service';
 import e from 'express';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-addjobseeker.component',
@@ -19,7 +20,8 @@ export class AddjobseekerComponent {
 
   constructor(
     private fb : FormBuilder,
-    private jobseekerService: JobseekerService // Replace with actual service type
+    private jobseekerService: JobseekerService, // Replace with actual service type
+    private router: Router
   ) {
     this.userForm = this.fb.group({
       name: ['', Validators.required],
@@ -83,6 +85,8 @@ export class AddjobseekerComponent {
         this.userForm.reset();
         this.jobSeekerForm.reset();
         this.photoFile = undefined!;
+        this.router.navigate(['']);
+        
       },
       error: err => {
         this.message = 'Registration failed. Please try again.';+( err.error?.message || err.message);
