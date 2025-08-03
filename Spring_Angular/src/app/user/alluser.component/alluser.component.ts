@@ -25,7 +25,7 @@ export class AlluserComponent implements OnInit {
 
 
  
-
+ 
   loadUsers(): void {
     this.userService.getAllUsers().subscribe({
       next: (data) => {
