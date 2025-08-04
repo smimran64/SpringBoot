@@ -7,12 +7,14 @@ import { AlluserComponent } from './user/alluser.component/alluser.component';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { AddjobseekerComponent } from './jobseeker/addjobseeker.component/addjobseeker.component';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LoginComponent } from './auth/login.component/login.component';
 
 @NgModule({
   declarations: [
     App,
     AlluserComponent,
-    AddjobseekerComponent
+    AddjobseekerComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

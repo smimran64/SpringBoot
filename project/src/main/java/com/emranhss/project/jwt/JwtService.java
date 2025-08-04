@@ -3,13 +3,14 @@ package com.emranhss.project.jwt;
 
 import com.emranhss.project.entity.User;
 import com.emranhss.project.repository.ITokenRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+
 
 import javax.crypto.SecretKey;
 import java.util.Date;
@@ -58,16 +59,16 @@ public class JwtService {
 
     }
 
-    public String extractUserName(String token) {
-
-        return extractClaim(token, Claims::getSubject);
-
-    }
-
     public <T> T extractClaim(String token, Function<Claims, T> resolver) {
 
         Claims claims = extractAllClaims(token);
         return resolver.apply(claims);
+    }
+
+    public String extractUserName(String token) {
+
+        return extractClaim(token, Claims::getSubject);
+
     }
 
     private Date extractExpiration(String token) {
