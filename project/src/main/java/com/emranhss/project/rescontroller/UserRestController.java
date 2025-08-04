@@ -22,6 +22,7 @@ public class UserRestController {
     @Autowired
     private UserService userService;
 
+
     @PostMapping("")
     public ResponseEntity<Map<String, String>> saveUser(
             @RequestPart(value = "user") String userJson,
@@ -33,7 +34,7 @@ public class UserRestController {
         try {
             userService.saveOrUpdate(user, file);
             Map<String, String> response = new HashMap<>();
-            response.put("status", "success");
+            response.put("Message", "User Added Successfully");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
@@ -51,10 +52,11 @@ public class UserRestController {
     }
 
 
+
+
     @PostMapping("login")
     public ResponseEntity<AuthenticationResponse>  login(@RequestBody User request){
         return ResponseEntity.ok(userService.authencate(request));
-
     }
 
 

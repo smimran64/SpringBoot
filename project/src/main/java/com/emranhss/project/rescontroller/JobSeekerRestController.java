@@ -3,6 +3,7 @@ package com.emranhss.project.rescontroller;
 
 import com.emranhss.project.entity.JobSeeker;
 import com.emranhss.project.entity.User;
+import com.emranhss.project.service.JobSeekerService;
 import com.emranhss.project.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,11 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/jobseeker/")
-@CrossOrigin("*")
+
 public class JobSeekerRestController {
 
 
@@ -25,32 +27,43 @@ public class JobSeekerRestController {
     private UserService userService;
 
 
+    @Autowired
+    private JobSeekerService jobSeekerService;
+
+
     @PostMapping("")
     public ResponseEntity<Map<String, String>> registerJobSeeker(
             @RequestPart(value = "user") String userJson,
             @RequestPart(value = "jobseeker") String jobSeekerJson,
-            @RequestParam(value = "photo",required = false)MultipartFile file
-            ) throws JsonProcessingException {
+            @RequestParam(value = "photo") MultipartFile file
+    ) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         User user = objectMapper.readValue(userJson, User.class);
         JobSeeker jobSeeker = objectMapper.readValue(jobSeekerJson, JobSeeker.class);
         try {
-            userService.registerJobSeeker(user,file,jobSeeker);
+            userService.registerJobSeeker(user, file, jobSeeker);
             Map<String, String> response = new HashMap<>();
 
             response.put("Message", "JobSeeker registered successfully");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }  catch (Exception e) {
+        } catch (Exception e) {
 
             Map<String, String> errorResponse = new HashMap<>();
 
-            errorResponse.put("Message","JobSeeker Registration Failed");
+            errorResponse.put("Message", "JobSeeker Registration Failed" + e);
 
-            return new ResponseEntity<>(errorResponse,HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 
 
         }
+
+
+    }
+
+    @GetMapping("all")
+    public List<JobSeeker> getAllUsers() {
+        return jobSeekerService.getAll();
     }
 }

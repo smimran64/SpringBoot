@@ -41,7 +41,6 @@ public class JobSeeker {
         this.address = address;
         this.dateOfBirth = dateOfBirth;
         this.photo = photo;
-
         this.user = user;
     }
 

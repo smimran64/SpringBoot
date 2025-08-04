@@ -69,12 +69,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 // If token is valid, create an Authentication token (Spring Security standard)
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,                      // Principal (user details)
-                        null,                             // Credentials (password) — null since already authenticated
+                        userDetails,
+                        null,    // Credentials (password) — null since already authenticated
                         userDetails.getAuthorities());      // User roles/authorities
 
 
                 // Building web authentication details (like remote IP, session ID) from the request
+
                 authToken.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
                 );

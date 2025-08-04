@@ -8,13 +8,15 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { AddjobseekerComponent } from './jobseeker/addjobseeker.component/addjobseeker.component';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './auth/login.component/login.component';
+import { ViewAllJobSeeker } from './jobseeker/view-all-job-seeker/view-all-job-seeker';
 
 @NgModule({
   declarations: [
     App,
     AlluserComponent,
     AddjobseekerComponent,
-    LoginComponent
+    LoginComponent,
+    ViewAllJobSeeker
   ],
   imports: [
     BrowserModule,
