@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class JobseekerService {
 
-  private baseUrl = environment.apiUrl + '/jobseeker/';
+  private baseUrl = environment.apiUrl + '/api/jobseeker/';
 
   constructor(
     private http: HttpClient
