@@ -35,16 +35,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             HttpServletRequest request,
             HttpServletResponse response,
-            FilterChain filterChain) throws ServletException, IOException {
+            FilterChain filterChain
+    ) throws ServletException, IOException {
 
+        System.out.println("JwtAuthenticationFilter: Incoming request to " + request.getRequestURI());
         // Extracting the Authorization header from the HTTP request
         String authHeader = request.getHeader("Authorization");
+        System.out.println("Authorization header: " + authHeader);
 
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 
             // If no token found or token format is incorrect, proceed with the filter chain
-
+            System.out.println("No JWT token found, skipping filter.");
             filterChain.doFilter(request, response);
             return;  // Exit current filter as no JWT is provided
         }
@@ -55,6 +58,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Extracting the username from the token using JwtService
         String username = jwtService.extractUserName(token);
+        System.out.println("Extracted Username from Token: " + username);
 
 
         // Proceed only if username is extracted and user is not already authenticated
@@ -62,6 +66,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             // Loading user details (from DB) using UserService based on extracted username
             UserDetails userDetails = userService.loadUserByUsername(username);
+            boolean valid = jwtService.isValid(token, userDetails);
+            System.out.println("Token validation result: " + valid);
 
 
             // Validating the token against the loaded user details
@@ -71,7 +77,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null,    // Credentials (password) — null since already authenticated
-                        userDetails.getAuthorities());      // User roles/authorities
+                        userDetails.getAuthorities()
+                );
 
 
                 // Building web authentication details (like remote IP, session ID) from the request
@@ -89,5 +96,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // Continue with the remaining filter chain (other filters, controllers, etc.)
         filterChain.doFilter(request, response);
+    }
+
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        System.out.println("Incoming Request Path: " + path);  // Add this log
+        boolean skip = path.equals("/api/user/login") || path.startsWith("/images/") || path.startsWith("/api/user/active/") || path.startsWith("/auth/login");
+        System.out.println("Should Skip Filter: " + skip);  // Add this log
+        return skip;
     }
 }

@@ -31,7 +31,7 @@ public class User implements UserDetails {
 
 
     @OneToMany
-    private List<Token>  tokens;
+    private List<Token> tokens;
 
     // for user details
 
