@@ -13,27 +13,31 @@ import java.util.Optional;
 public class JobSeekerService {
 
 
-
     @Autowired
-private IJobSeekerRepo jobSeekerRepo;
+    private IJobSeekerRepo jobSeekerRepo;
 
 
-   public List<JobSeeker>getAll(){
+    public List<JobSeeker> getAll() {
         return jobSeekerRepo.findAll();
-   }
+    }
 
-   public Optional<JobSeeker> getById(Long id) {
-       return jobSeekerRepo.findById(id);
-   }
-
-
-   public JobSeeker save(JobSeeker jobSeeker) {
-       return jobSeekerRepo.save(jobSeeker);
-   }
+    public Optional<JobSeeker> getById(Long id) {
+        return jobSeekerRepo.findById(id);
+    }
 
 
-   public void delete(long id) {
-       jobSeekerRepo.deleteById(id);
-   }
+    public JobSeeker save(JobSeeker jobSeeker) {
+        return jobSeekerRepo.save(jobSeeker);
+    }
+
+
+    public void delete(long id) {
+        jobSeekerRepo.deleteById(id);
+    }
+
+    public JobSeeker getProfileByUserId(int userId) {
+        return jobSeekerRepo.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("Job Seeker not found"));
+    }
 
 }
