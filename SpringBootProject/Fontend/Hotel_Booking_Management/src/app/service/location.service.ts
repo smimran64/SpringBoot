@@ -26,6 +26,28 @@ export class LocationService {
     });
   }
 
+  // Update location with image
+  updateLocation(id: number, location: Location, image?: File) {
+    const formData = new FormData();
+    formData.append('location', new Blob([JSON.stringify(location)], { type: 'application/json' }));
+
+    // Append image only if provided (optional)
+    if (image) {
+      formData.append('image', image);
+    }
+
+    return this.http.put(this.baseUrl + `update/${id}`, formData, {
+      responseType: 'text' as 'json'
+    });
+  }
+
+  // Delete location by id
+  deleteLocation(id: number) {
+    return this.http.delete(this.baseUrl + `delete/${id}`, {
+      responseType: 'text' as 'json'
+    });
+  }
+
 
 
 
