@@ -9,6 +9,7 @@ import { AddjobseekerComponent } from './jobseeker/addjobseeker.component/addjob
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginComponent } from './auth/login.component/login.component';
 import { ViewAllJobSeeker } from './jobseeker/view-all-job-seeker/view-all-job-seeker';
+import { Jobseekerprofilecomponent } from './jobseeker/jobseekerprofilecomponent/jobseekerprofilecomponent';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { ViewAllJobSeeker } from './jobseeker/view-all-job-seeker/view-all-job-s
     AlluserComponent,
     AddjobseekerComponent,
     LoginComponent,
-    ViewAllJobSeeker
+    ViewAllJobSeeker,
+    Jobseekerprofilecomponent
   ],
   imports: [
     BrowserModule,

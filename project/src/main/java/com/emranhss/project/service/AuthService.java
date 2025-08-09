@@ -218,9 +218,7 @@ public class AuthService {
         token.setToken(jwt);
         token.setLogout(false);
         token.setUser(user);
-
         tokenRepository.save(token);
-
     }
 
 

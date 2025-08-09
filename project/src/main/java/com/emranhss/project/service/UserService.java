@@ -74,7 +74,10 @@ public class UserService implements UserDetailsService {
         User user = userRepo.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name()));
+        List<GrantedAuthority> authorities = Collections.singletonList(
+                new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
+        );
+
 
         return new org.springframework.security.core.userdetails.User(
                 user.getEmail(),
