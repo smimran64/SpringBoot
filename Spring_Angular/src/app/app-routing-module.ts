@@ -10,8 +10,7 @@ const routes: Routes = [
   { path: '', component: AlluserComponent },
   { path: 'jobseeker', component: AddjobseekerComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'jobsekpro', component: Jobseekerprofilecomponent },
-
+  { path: 'jobsekpro', component: Jobseekerprofilecomponent},
 
 ];
 

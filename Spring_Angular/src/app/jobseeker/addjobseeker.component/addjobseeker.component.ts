@@ -16,10 +16,10 @@ export class AddjobseekerComponent {
   userForm!: FormGroup;
   jobSeekerForm!: FormGroup;
   photoFile!: File;
-  message: string ='';
+  message: string = '';
 
   constructor(
-    private fb : FormBuilder,
+    private fb: FormBuilder,
     private jobseekerService: JobseekerService, // Replace with actual service type
     private router: Router
   ) {
@@ -50,12 +50,12 @@ export class AddjobseekerComponent {
 
   onSubmit(): void {
 
-    if(!this.photoFile){
+    if (!this.photoFile) {
       this.message = 'Please select a photo.';
       return;
     }
 
-    if(this.userForm.invalid || this.jobSeekerForm.invalid) {
+    if (this.userForm.invalid || this.jobSeekerForm.invalid) {
       this.message = 'Please fill in all required fields.';
       return;
     }
@@ -65,7 +65,7 @@ export class AddjobseekerComponent {
       email: this.userForm.value.email,
       phone: this.userForm.value.phone,
       password: this.userForm.value.password,
-      role : 'JOBSEEKER'
+      role: 'JOBSEEKER'
     };
 
     const jobseeker = {
@@ -80,16 +80,16 @@ export class AddjobseekerComponent {
 
     this.jobseekerService.registerJobSeeker(user, jobseeker, this.photoFile).subscribe({
 
-      next: res =>{
+      next: res => {
         this.message = res.message || 'Jobseeker registered successfully!';
         this.userForm.reset();
         this.jobSeekerForm.reset();
         this.photoFile = undefined!;
         this.router.navigate(['']);
-        
+
       },
       error: err => {
-        this.message = 'Registration failed. Please try again.';+( err.error?.message || err.message);
+        this.message = 'Registration failed. Please try again.'; +(err.error?.message || err.message);
       }
     });
   }
