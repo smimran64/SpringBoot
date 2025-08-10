@@ -7,12 +7,14 @@ import { AddlocationComponent } from './location/addlocation-component/addlocati
 import { Viewalllocation } from './location/viewalllocation/viewalllocation';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideHttpClient, withFetch } from '@angular/common/http';
+import { EditLocationComponent } from './location/edit-location-component/edit-location-component';
 
 @NgModule({
   declarations: [
     App,
     AddlocationComponent,
-    Viewalllocation
+    Viewalllocation,
+    EditLocationComponent
   ],
   imports: [
     BrowserModule,

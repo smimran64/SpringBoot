@@ -58,7 +58,7 @@ export class AddlocationComponent implements OnInit {
 
         next: res => {
           console.log('location added successfully', location);
-          this.router.navigate(['/viewalllocation']);
+          this.router.navigate(['/']);
         },
 
         error: err => {

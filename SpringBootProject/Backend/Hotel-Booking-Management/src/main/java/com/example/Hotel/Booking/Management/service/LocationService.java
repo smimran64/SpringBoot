@@ -26,7 +26,7 @@ public class LocationService {
     Location location = new Location();
 
 
-    @Value("src/main/resource/static/images")
+    @Value("src/main/resources/static/images")
     private String uploadDir;
 
     public List<Location> getAllLocations() {
@@ -53,18 +53,14 @@ public class LocationService {
 
     }
 
-    public void deleteLocation(int id) {
-
-        if ((locationRepository.existsById(id))) {
-            throw  new EntityNotFoundException("Location with id: " + id + " not found!");
-        }
-        else {
+    public boolean deleteLocation(int id) {
+        if (locationRepository.existsById(id)) {
             locationRepository.deleteById(id);
+            return true;
         }
-
-
-
+        return false;
     }
+
 
     public Location updateLocation(int id, Location updateLocation) {
 

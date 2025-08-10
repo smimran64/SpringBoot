@@ -48,18 +48,15 @@ public class LocationRestController {
 
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteLocation(@PathVariable int id)  {
-
-        try{
-            locationService.deleteLocation(id);
-
-            return new ResponseEntity<>("Location deleted successfully", HttpStatus.OK);
-        } catch (EntityNotFoundException e){
-
-            return new ResponseEntity<>("Location not found", HttpStatus.NOT_FOUND);
+    public ResponseEntity<String> deleteLocation(@PathVariable int id) {
+        boolean deleted = locationService.deleteLocation(id);
+        if (deleted) {
+            return ResponseEntity.ok("Location deleted successfully");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Location not found");
         }
-
     }
+
 
 
     @PutMapping("/update/{id}")
