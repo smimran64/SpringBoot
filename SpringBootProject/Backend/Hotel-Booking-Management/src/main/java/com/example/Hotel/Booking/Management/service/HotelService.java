@@ -21,6 +21,8 @@ import java.util.UUID;
 @Service
 public class HotelService {
 
+
+    @Autowired
     private HotelRepository hotelRepository;
 
     @Autowired
@@ -36,6 +38,7 @@ public class HotelService {
 
         return hotelRepository.findAll();
     }
+
 
     public void saveHotel(Hotel hotel, MultipartFile imageFile) throws IOException {
 
@@ -60,7 +63,15 @@ public class HotelService {
     }
 
 
-    public void updateHotel(int id,Hotel updatehotel, MultipartFile imageFile) throws IOException {
+    public Hotel findHotelByName(String name) {
+
+        return hotelRepository.findByName(name)
+                .orElseThrow(() -> new EntityNotFoundException("Hotel with id: " + name + " not found!"));
+    }
+
+
+
+    public Hotel updateHotel(int id, Hotel updatehotel, MultipartFile imageFile) throws IOException {
        Hotel existingHotel = hotelRepository.findById(id)
                .orElseThrow(() -> new EntityNotFoundException("Hotel with id: " + id + " not found!"));
 
@@ -85,10 +96,21 @@ public class HotelService {
 
             existingHotel.setImage(fileName);
         }
+
+
+        return hotelRepository.save(existingHotel);
     }
 
     public List<Hotel>findHotelByLocationName(String locationName) {
         return hotelRepository.findHotelByLocationName(locationName);
+    }
+
+    public boolean deleteHotel(int id) {
+        if (hotelRepository.existsById(id)) {
+            hotelRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 
 

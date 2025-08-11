@@ -62,12 +62,18 @@ public class LocationService {
     }
 
 
-    public Location updateLocation(int id, Location updateLocation) {
+    public Location updateLocation(int id, Location updateLocation, MultipartFile imageFile) throws IOException {
 
         Location existingLocation = locationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Location with id: " + id + " not found!"));
         if(updateLocation.getName()!=null) {
             existingLocation.setName(updateLocation.getName());
+        }
+
+        if (imageFile!= null && !imageFile.isEmpty()) {
+            String fileName = saveImage(imageFile,existingLocation);
+
+            existingLocation.setImage(fileName);
         }
 
         return locationRepository.save(existingLocation);

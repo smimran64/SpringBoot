@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { environments } from '../../environments/environments';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '../model/location.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -51,7 +52,7 @@ export class LocationService {
 
 
 
-  getAllLocations() {
+  getAllLocations(): Observable<any> {
     return this.http.get(this.baseUrl);
   }
 

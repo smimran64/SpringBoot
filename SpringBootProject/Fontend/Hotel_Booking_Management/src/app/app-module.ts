@@ -8,13 +8,17 @@ import { Viewalllocation } from './location/viewalllocation/viewalllocation';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { EditLocationComponent } from './location/edit-location-component/edit-location-component';
+import { AddhotelComponent } from './hotel/addhotel-component/addhotel-component';
+import { Viewallhotelcomponent } from './hotel/viewallhotelcomponent/viewallhotelcomponent';
 
 @NgModule({
   declarations: [
     App,
     AddlocationComponent,
     Viewalllocation,
-    EditLocationComponent
+    EditLocationComponent,
+    AddhotelComponent,
+    Viewallhotelcomponent
   ],
   imports: [
     BrowserModule,
