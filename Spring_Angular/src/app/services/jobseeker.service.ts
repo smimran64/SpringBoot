@@ -1,8 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { JobSeeker } from '../model/jobseeker.model';
+import { AuthService } from './auth-service';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -11,31 +13,35 @@ export class JobseekerService {
 
   private baseUrl = environment.apiUrl + '/api/jobseeker/';
 
-  constructor(
-    private http: HttpClient
+
+
+  constructor(private http: HttpClient, private authService: AuthService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
-  
 
 
-  registerJobSeeker(user:any, jobseeker: any, photo: File): Observable<any> {
 
+
+  registerJobSeeker(user: any, jobSeeker: any, photo: File): Observable<any> {
     const formData = new FormData();
     formData.append('user', JSON.stringify(user));
-    formData.append('jobseeker', JSON.stringify(jobseeker));
+    formData.append('jobSeeker', JSON.stringify(jobSeeker));
     formData.append('photo', photo);
 
     return this.http.post(this.baseUrl, formData);
   }
 
-
-   getProfile(): Observable<JobSeeker> {
-    const token = localStorage.getItem('authToken');
+  getProfile(): Observable<JobSeeker> {
     let headers = new HttpHeaders();
 
-    if (token) {
-      headers = headers.set('Authorization', 'Bearer ' + token);
+    if (isPlatformBrowser(this.platformId)) {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        headers = headers.set('Authorization', 'Bearer ' + token);
+        console.log(headers);
+      }
     }
 
-    return this.http.get<JobSeeker>(`${this.baseUrl}profile`, { headers });
+    return this.http.get<JobSeeker>(`${environment.apiUrl}/api/jobseeker/profile`, { headers });
   }
 }

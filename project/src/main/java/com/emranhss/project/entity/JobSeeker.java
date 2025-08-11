@@ -1,9 +1,11 @@
 package com.emranhss.project.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table
@@ -11,8 +13,7 @@ public class JobSeeker {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    private Long id;
 
     private String name;
     private String email;
@@ -22,17 +23,20 @@ public class JobSeeker {
     private Date dateOfBirth;
     private String photo;
 
-
-
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @OneToMany(mappedBy = "jobSeeker", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
+    private List<Education> educations;
+
+
     public JobSeeker() {
+
     }
 
-
-    public JobSeeker(long id, String name, String email, String phone, String gender, String address, Date dateOfBirth, String photo, User user) {
+    public JobSeeker(Long id, String name, String email, String phone, String gender, String address, Date dateOfBirth, String photo, User user) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -44,11 +48,11 @@ public class JobSeeker {
         this.user = user;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -114,5 +118,13 @@ public class JobSeeker {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Education> getEducations() {
+        return educations;
+    }
+
+    public void setEducations(List<Education> educations) {
+        this.educations = educations;
     }
 }
