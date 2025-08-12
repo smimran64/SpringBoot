@@ -2,10 +2,7 @@ package com.example.HotelBookingManagementSystem.service;
 
 
 import com.example.HotelBookingManagementSystem.dto.AuthenticationResponse;
-import com.example.HotelBookingManagementSystem.entity.Customer;
-import com.example.HotelBookingManagementSystem.entity.Role;
-import com.example.HotelBookingManagementSystem.entity.Token;
-import com.example.HotelBookingManagementSystem.entity.User;
+import com.example.HotelBookingManagementSystem.entity.*;
 import com.example.HotelBookingManagementSystem.jwt.JwtService;
 import com.example.HotelBookingManagementSystem.repository.TokenRepository;
 import com.example.HotelBookingManagementSystem.repository.UserRepository;
@@ -40,6 +37,9 @@ public class AuthService {
     private EmailService emailService;
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private HotelAminService hotelAminService;
 
     @Autowired
     @Lazy
@@ -150,7 +150,9 @@ public class AuthService {
     }
 
 
-    // for User folder
+    // Start Customer
+
+
     public String saveImageForCustomer(MultipartFile file, Customer customer) {
 
         Path uploadPath = Paths.get(uploadDir + "/customer");
@@ -207,6 +209,78 @@ public class AuthService {
         // Send Activation Email
         sendActivationEmail(savedUser);
     }
+
+    // end customer
+
+
+    // Hotel Admin Details Start
+
+
+
+    public String saveImageForHotelAmin(MultipartFile file, HotelAdmin hotelAdmin) {
+
+        Path uploadPath = Paths.get(uploadDir + "/hotelAdmin");
+        if (!Files.exists(uploadPath)) {
+            try {
+                Files.createDirectory(uploadPath);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        String hotelAdminName = hotelAdmin.getName();
+        String fileName = hotelAdminName.trim().replaceAll("\\s+", "_");
+
+        String savedFileName = fileName + "_" + UUID.randomUUID().toString();
+
+        try {
+            Path filePath = uploadPath.resolve(savedFileName);
+            Files.copy(file.getInputStream(), filePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return savedFileName;
+
+    }
+
+    public void registerHotelAdmin(User user, MultipartFile imageFile, HotelAdmin hotelAdminData) throws IOException {
+        if (imageFile != null && !imageFile.isEmpty()) {
+            // Save image for both User and HotelAdmin
+            String filename = saveImage(imageFile, user);
+            String hotelAdminImage = saveImageForHotelAmin(imageFile, hotelAdminData);
+            hotelAdminData.setImage(hotelAdminImage);
+            user.setImage(filename);
+        }
+
+        // Encode password before saving User
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.HOTEL_ADMIN);
+        user.setActive(false);
+
+        // Save User FIRST and get persisted instance
+        User savedUser = userRepository.save(user);
+
+        // Now, associate saved User with JobSeeker and save JobSeeker
+        hotelAdminData.setUser(savedUser);
+        hotelAminService.saveHotelAdmin(hotelAdminData);
+
+        // Now generate token and save Token associated with savedUser
+        String jwt = jwtService.generateToken(savedUser);
+        saveUserToken(jwt, savedUser);
+
+        // Send Activation Email
+        sendActivationEmail(savedUser);
+    }
+
+
+
+                                             // Hotel Admin part End//
+
+
+
+
+
 
     private void saveUserToken(String jwt, User user) {
         Token token = new Token();

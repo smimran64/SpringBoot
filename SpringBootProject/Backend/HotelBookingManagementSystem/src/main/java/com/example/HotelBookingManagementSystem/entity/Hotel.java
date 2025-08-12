@@ -2,6 +2,8 @@ package com.example.HotelBookingManagementSystem.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "hotels")
 public class Hotel {
@@ -22,11 +24,14 @@ public class Hotel {
     @JoinColumn(name = "hotel_admin_id")
     private HotelAdmin hotelAdmin;
 
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Room> rooms;
+
 
     public Hotel() {
     }
 
-    public Hotel(int id, String name, String address, String rating, String image, Location location, HotelAdmin hotelAdmin) {
+    public Hotel(int id, String name, String address, String rating, String image, Location location, HotelAdmin hotelAdmin, List<Room> rooms) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -34,6 +39,7 @@ public class Hotel {
         this.image = image;
         this.location = location;
         this.hotelAdmin = hotelAdmin;
+        this.rooms = rooms;
     }
 
     public int getId() {
@@ -90,5 +96,13 @@ public class Hotel {
 
     public void setHotelAdmin(HotelAdmin hotelAdmin) {
         this.hotelAdmin = hotelAdmin;
+    }
+
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
     }
 }

@@ -1,6 +1,9 @@
 package com.example.HotelBookingManagementSystem.entity;
 
 import jakarta.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
 
 @Entity
 @Table(name = "locations")
@@ -12,14 +15,20 @@ public class Location {
     private int id;
     private String name;
     private String image;
+    @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Hotel> hotels;
+
+
+
 
     public Location() {
     }
 
-    public Location(int id, String name, String image) {
+    public Location(int id, String name, String image, List<Hotel> hotels) {
         this.id = id;
         this.name = name;
         this.image = image;
+        this.hotels = hotels;
     }
 
     public int getId() {
@@ -44,5 +53,13 @@ public class Location {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public List<Hotel> getHotels() {
+        return hotels;
+    }
+
+    public void setHotels(List<Hotel> hotels) {
+        this.hotels = hotels;
     }
 }

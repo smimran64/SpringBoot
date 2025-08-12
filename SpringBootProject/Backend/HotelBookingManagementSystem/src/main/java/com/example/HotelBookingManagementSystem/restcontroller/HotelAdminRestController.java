@@ -2,10 +2,12 @@ package com.example.HotelBookingManagementSystem.restcontroller;
 
 
 import com.example.HotelBookingManagementSystem.entity.Customer;
+import com.example.HotelBookingManagementSystem.entity.HotelAdmin;
 import com.example.HotelBookingManagementSystem.entity.User;
 import com.example.HotelBookingManagementSystem.repository.UserRepository;
 import com.example.HotelBookingManagementSystem.service.AuthService;
 import com.example.HotelBookingManagementSystem.service.CustomerService;
+import com.example.HotelBookingManagementSystem.service.HotelAminService;
 import com.example.HotelBookingManagementSystem.service.UserService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,44 +24,47 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/customer/")
-public class CustomerRestController {
+@RequestMapping("/api/hotelAdmin")
+public class HotelAdminRestController {
 
     @Autowired
     private UserService userService;
 
     @Autowired
-    private CustomerService customerService;
+    private HotelAminService hotelAminService;
 
     @Autowired
     private UserRepository userRepository;
 
+
     @Autowired
     private AuthService authService;
+    @Autowired
+    private CustomerService customerService;
 
 
     @PostMapping("")
-    public ResponseEntity<Map<String, String>> registerCustomer(
+    public ResponseEntity<Map<String, String>> registerHotelAdmin(
             @RequestPart(value = "user") String userJson,
-            @RequestPart(value = "customer") String customerJson,
+            @RequestPart(value = "hotelAdmin") String hotelAdminJson,
             @RequestParam(value = "image") MultipartFile file
     ) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         User user = objectMapper.readValue(userJson, User.class);
-        Customer customer = objectMapper.readValue(customerJson, Customer.class);
+        HotelAdmin hotelAdmin = objectMapper.readValue(hotelAdminJson,HotelAdmin.class);
         try {
-            authService.registerCustomer(user, file, customer);
+            authService.registerHotelAdmin(user, file, hotelAdmin);
             Map<String, String> response = new HashMap<>();
 
-            response.put("Message", "Customer registered successfully");
+            response.put("Message", "Hotel Admin registered successfully");
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
 
             Map<String, String> errorResponse = new HashMap<>();
 
-            errorResponse.put("Message", "Customer Registration Failed" + e);
+            errorResponse.put("Message", "HotelAdmin Registration Failed" + e);
 
             return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -70,9 +75,9 @@ public class CustomerRestController {
     }
 
     @GetMapping("all")
-    public ResponseEntity<List<Customer>> getAllUsers() {
-        List<Customer> customerList = customerService.getAllCustomers();
-        return ResponseEntity.ok(customerList);
+    public ResponseEntity<List<HotelAdmin>> getAllUsers() {
+        List<HotelAdmin> hotelAdminList = hotelAminService.getHotelAdmins();
+        return ResponseEntity.ok(hotelAdminList);
 
     }
 
@@ -82,8 +87,10 @@ public class CustomerRestController {
         System.out.println("Authorities: " + authentication.getAuthorities());
         String email = authentication.getName();
         Optional<User> user =userRepository.findByEmail(email);
-        Customer customer = customerService.getProfileByUserId((long) user.get().getId());
-        return ResponseEntity.ok(customer);
+        HotelAdmin hotelAdmin = hotelAminService.getProfileByUserId((Integer) user.get().getId());
+        return ResponseEntity.ok(hotelAdmin);
 
     }
+
+
 }

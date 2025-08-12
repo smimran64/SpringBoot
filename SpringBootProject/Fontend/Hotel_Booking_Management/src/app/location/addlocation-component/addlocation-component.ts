@@ -15,7 +15,7 @@ export class AddlocationComponent implements OnInit {
 
 
   formGroup!: FormGroup;
-  image: File | null = null;
+  imageFile: File | null = null;
 
   constructor(
     private locationService: LocationService,
@@ -32,14 +32,24 @@ export class AddlocationComponent implements OnInit {
 
   }
 
-  onFileSelected(evt: Event): void {
-    const input = evt.target as HTMLInputElement;
-    if (input?.files && input.files[0]) {
+  // onFileSelected(evt: Event): void {
+  //   const input = evt.target as HTMLInputElement;
+  //   if (input?.files && input.files[0]) {
 
-      this.image = input.files[0];
+  //     this.image = input.files[0];
+  //   }
+
+  // }
+
+
+onFileSelected(event: any): void {
+    if (event.target.files.length > 0) {
+      this.imageFile = event.target.files[0];
+      console.log('Selected file:', this.imageFile);
     }
-
   }
+
+
 
 
   onSubmit() {
@@ -47,18 +57,18 @@ export class AddlocationComponent implements OnInit {
       alert("Please fill all required fields");
     }
 
-    if (this.image) {
+    if (this.imageFile) {
 
       const location: Location = {
         ...this.formGroup.value
 
       };
 
-      this.locationService.createLocation(location, this.image).subscribe({
+      this.locationService.createLocation(location, this.imageFile).subscribe({
 
         next: res => {
           console.log('location added successfully', location);
-          this.router.navigate(['/locatons']);
+          this.router.navigate(['/']);
         },
 
         error: err => {

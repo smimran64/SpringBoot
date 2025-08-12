@@ -12,6 +12,11 @@ import { AddhotelComponent } from './hotel/addhotel-component/addhotel-component
 import { Viewallhotelcomponent } from './hotel/viewallhotelcomponent/viewallhotelcomponent';
 import { CustomerRegComponent } from './customer/customer-reg-component/customer-reg-component';
 import { Viewcustomercomponent } from './customer/viewcustomercomponent/viewcustomercomponent';
+import { Navbar } from './layout/navbar/navbar';
+import { Footer } from './layout/footer/footer';
+import { AboutHotel } from './layout/about-hotel/about-hotel';
+import { Login } from './auth/login/login';
+import { Logout } from './auth/logout/logout';
 
 @NgModule({
   declarations: [
@@ -22,7 +27,12 @@ import { Viewcustomercomponent } from './customer/viewcustomercomponent/viewcust
     AddhotelComponent,
     Viewallhotelcomponent,
     CustomerRegComponent,
-    Viewcustomercomponent
+    Viewcustomercomponent,
+    Navbar,
+    Footer,
+    AboutHotel,
+    Login,
+    Logout
   ],
   imports: [
     BrowserModule,

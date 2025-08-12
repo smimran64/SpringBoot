@@ -25,9 +25,7 @@ public class Customer {
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @OneToMany
-    @JoinColumn(name = "bookingId",nullable = false)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Booking> bookings;
 
     public Customer() {
