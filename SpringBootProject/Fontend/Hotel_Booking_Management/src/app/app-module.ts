@@ -10,6 +10,8 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { EditLocationComponent } from './location/edit-location-component/edit-location-component';
 import { AddhotelComponent } from './hotel/addhotel-component/addhotel-component';
 import { Viewallhotelcomponent } from './hotel/viewallhotelcomponent/viewallhotelcomponent';
+import { CustomerRegComponent } from './customer/customer-reg-component/customer-reg-component';
+import { Viewcustomercomponent } from './customer/viewcustomercomponent/viewcustomercomponent';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { Viewallhotelcomponent } from './hotel/viewallhotelcomponent/viewallhote
     Viewalllocation,
     EditLocationComponent,
     AddhotelComponent,
-    Viewallhotelcomponent
+    Viewallhotelcomponent,
+    CustomerRegComponent,
+    Viewcustomercomponent
   ],
   imports: [
     BrowserModule,

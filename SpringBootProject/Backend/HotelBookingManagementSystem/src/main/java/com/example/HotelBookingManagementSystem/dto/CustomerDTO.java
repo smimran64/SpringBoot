@@ -25,7 +25,6 @@ public class CustomerDTO {
         this.id = customer.getId();
         this.name = customer.getName();
         this.email = customer.getEmail();
-        this.password = customer.getPassword();
         this.phone = customer.getPhone();
         this.address = customer.getAddress();
         this.gender = customer.getGender();
@@ -56,14 +55,6 @@ public class CustomerDTO {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getPhone() {

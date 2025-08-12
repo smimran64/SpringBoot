@@ -29,9 +29,6 @@ public class User implements UserDetails {
     private Role role;
 
     @OneToMany
-    private List<Booking> bookings;
-
-    @OneToMany
     private List<Token> tokens;
 
     @Column(nullable = false)
@@ -41,7 +38,7 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(int id, String name, String email, String password, String phone, String image, Role role, List<Booking> bookings, List<Token> tokens, boolean active, boolean isLock) {
+    public User(int id, String name, String email, String password, String phone, String image, Role role, List<Token> tokens, boolean active, boolean isLock) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -49,7 +46,6 @@ public class User implements UserDetails {
         this.phone = phone;
         this.image = image;
         this.role = role;
-        this.bookings = bookings;
         this.tokens = tokens;
         this.active = active;
         this.isLock = isLock;
@@ -107,14 +103,6 @@ public class User implements UserDetails {
         this.role = role;
     }
 
-    public List<Booking> getBookings() {
-        return bookings;
-    }
-
-    public void setBookings(List<Booking> bookings) {
-        this.bookings = bookings;
-    }
-
     public List<Token> getTokens() {
         return tokens;
     }
@@ -124,7 +112,7 @@ public class User implements UserDetails {
     }
 
     public boolean isActive() {
-        return active;
+        return true;
     }
 
     public void setActive(boolean active) {

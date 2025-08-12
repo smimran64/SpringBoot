@@ -1,18 +1,17 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environments } from '../../environments/environments';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthResponse } from '../model/authResponse.model';
+import { AuthResponse } from '../model/authresponse.model';
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class Authservice {
 
-
-  private baseUrl = environment.apiUrl + '/auth/';
+  private baseUrl = environments.apiUrl + '/auth/';
 
   private headers = new HttpHeaders({ 'Content-Type': 'application/json' });
 
@@ -115,10 +114,14 @@ export class AuthService {
 
   }
 
-  isJobSeeker(): boolean {
-    return this.getUserRole() === 'JOBSEEKER';
+  isCustomer(): boolean {
+    return this.getUserRole() === 'CUSTOMER';
   }
-
-
+  isHotelAdmin(): boolean {
+    return this.getUserRole() === 'HOTEL_ADMIN';
+  }
+  isAdmin(): boolean {
+    return this.getUserRole() === 'ADMIN';
+  }
 
 }

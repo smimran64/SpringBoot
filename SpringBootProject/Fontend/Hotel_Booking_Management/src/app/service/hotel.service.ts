@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { environments } from '../../environments/environments';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
@@ -12,7 +12,8 @@ export class HotelService {
   baseUrl: string = environments.apiUrl + '/api/hotel';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
 

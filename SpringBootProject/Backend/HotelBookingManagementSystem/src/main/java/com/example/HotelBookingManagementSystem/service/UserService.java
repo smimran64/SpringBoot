@@ -98,6 +98,21 @@ public class UserService implements UserDetailsService {
 
     }
 
+    public List<User> findAll() {
+
+        return userRepository.findAll();
+    }
+
+    public User findById(int id) {
+
+        return userRepository.findById(id).get();
+    }
+
+    public void delete(User user) {
+        userRepository.delete(user);
+    }
+
+
     public String saveImage(MultipartFile file, User user) {
 
         Path uploadPath = Paths.get(uploadDir + "/users");

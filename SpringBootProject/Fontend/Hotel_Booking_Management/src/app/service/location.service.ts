@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { environments } from '../../environments/environments';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '../model/location.model';
@@ -12,7 +12,8 @@ export class LocationService {
   private baseUrl = environments.apiUrl + '/api/location/';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+     @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   //creat location
