@@ -1,19 +1,25 @@
-package com.example.Hotel.Booking.Management.service;
+package com.example.HotelBookingManagementSystem.service;
 
 
-import com.example.Hotel.Booking.Management.dto.AuthenticationResponse;
-import com.example.Hotel.Booking.Management.entity.Role;
-import com.example.Hotel.Booking.Management.entity.Token;
-import com.example.Hotel.Booking.Management.entity.User;
-import com.example.Hotel.Booking.Management.jwt.JwtService;
-import com.example.Hotel.Booking.Management.repository.TokenRepository;
-import com.example.Hotel.Booking.Management.repository.UserRepository;
+
+import com.example.HotelBookingManagementSystem.dto.AuthenticationResponse;
+import com.example.HotelBookingManagementSystem.entity.Role;
+import com.example.HotelBookingManagementSystem.entity.Token;
+import com.example.HotelBookingManagementSystem.entity.User;
+import com.example.HotelBookingManagementSystem.jwt.JwtService;
+import com.example.HotelBookingManagementSystem.repository.TokenRepository;
+import com.example.HotelBookingManagementSystem.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,68 +29,108 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 @Service
-public class AuthService {
+public class UserService implements UserDetailsService {
 
+
+
+    private final PasswordEncoder passwordEncoder;
     @Autowired
     private UserRepository userRepository;
+
     @Autowired
-    private  PasswordEncoder passwordEncoder;
+    private TokenRepository tokenRepository;
+
     @Autowired
-    private  JwtService jwtService;
+    private CustomerService customerService;
+
     @Autowired
-    private  TokenRepository tokenRepository;
+    private JwtService jwtService;
+
     @Autowired
     @Lazy
-    private  AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
+
     @Autowired
-    private  EmailService emailService;
+    EmailService emailService;
 
     @Value("src/main/resources/static/images")
     private String uploadDir;
 
+    public UserService(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
-    private void saveUserToken(String jwt, User user) {
-        Token token = new Token();
-        token.setToken(jwt);
-        token.setLogout(false);
-        token.setUser(user);
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        tokenRepository.save(token);
+        List<GrantedAuthority> authorities = Collections.singletonList(
+                new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
+        );
 
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                authorities
+        );
     }
 
     public void saveOrUpdate(User user, MultipartFile imageFile) {
 
         if (imageFile != null && !imageFile.isEmpty()) {
-            String filename = saveImage(imageFile, user);
-            user.setImage(filename);
+
+            String fileName = saveImage(imageFile, user);
+
+            user.setImage(fileName);
         }
+
 
         user.setRole(Role.ADMIN);
         userRepository.save(user);
         sendActivationEmail(user);
+
     }
 
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
+    public String saveImage(MultipartFile file, User user) {
 
-    public User findById(int id) {
-        return userRepository.findById(id).get();
-    }
+        Path uploadPath = Paths.get(uploadDir + "/users");
 
-    public void delete(User user) {
-        userRepository.delete(user);
+        if (!Files.exists(uploadPath)) {
+
+            try {
+                Files.createDirectory(uploadPath);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        String fileName = file.getName() + "_" + UUID.randomUUID().toString();
+
+
+        try {
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(file.getInputStream(), filePath);
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return fileName;
+
     }
 
     private void sendActivationEmail(User user) {
         String subject = "Welcome to Our Service – Confirm Your Registration";
 
-        String activationLink="http://localhost:8085/api/user/active/"+user.getId();
+        String activationLink = "http://localhost:8085/api/user/active/" + user.getId();
 
         String mailText = "<!DOCTYPE html>"
                 + "<html>"
@@ -127,65 +173,24 @@ public class AuthService {
     }
 
 
-    // for User folder
-    public String saveImage(MultipartFile file, User user) {
+    private void saveUserToken(String jwt, User user) {
+        Token token = new Token();
+        token.setToken(jwt);
+        token.setLogout(false);
+        token.setUser(user);
 
-        Path uploadPath = Paths.get(uploadDir + "/users");
-        if (!Files.exists(uploadPath)) {
-            try {
-                Files.createDirectory(uploadPath);
+        tokenRepository.save(token);
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        String fileName = user.getName() + "_" + UUID.randomUUID().toString();
-
-
-        try {
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(file.getInputStream(), filePath);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        return fileName;
-
-    }
-
-    public void registerUser(User user, MultipartFile imageFile) {
-        if (imageFile != null && !imageFile.isEmpty()) {
-            // Save image for both User and JobSeeker
-            String filename = saveImage(imageFile, user);
-
-            user.setImage(filename);
-        }
-
-        // Encode password before saving User
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(Role.USER);
-        user.setActive(false);
-
-        // Save User FIRST and get persisted instance
-        User savedUser = userRepository.save(user);
-
-
-        // Now generate token and save Token associated with savedUser
-        String jwt = jwtService.generateToken(savedUser);
-        saveUserToken(jwt, savedUser);
-
-        // Send Activation Email
-        sendActivationEmail(savedUser);
     }
 
     private void removeAllTokenByUser(User user) {
-
         List<Token> validTokens = tokenRepository.findAllTokenByUser(user.getId());
 
         if (validTokens.isEmpty()) {
             return;
         }
-        validTokens.forEach(t -> {
+
+        validTokens.forEach(t->{
             t.setLogout(true);
         });
 
@@ -194,41 +199,39 @@ public class AuthService {
     }
 
     // It is Login Method
-    public AuthenticationResponse authenticate(User request) {
-        // Authenticate Username & Password
+
+
+    public AuthenticationResponse authencate(User request){
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
+                        request.getEmail(),
                         request.getPassword()
                 )
         );
 
-        // Fetch User from DB
-        User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user=userRepository.findByEmail(request.getEmail()).orElseThrow();
 
-        // Check Activation Status
         if (!user.isActive()) {
             throw new RuntimeException("Account is not activated. Please check your email for activation link.");
         }
 
-        // Generate JWT Token
-        String jwt = jwtService.generateToken(user);
+        // Generate Token for Current User
+        String jwt=jwtService.generateToken(user);
 
-        // Remove Existing Tokens (Invalidate Old Sessions)
+        //Remove all existing toke for this user
         removeAllTokenByUser(user);
 
-        // Save New Token to DB (Optional if stateless)
         saveUserToken(jwt, user);
 
-        // Return Authentication Response
-        return new AuthenticationResponse(jwt, "User Login Successful");
+        return  new AuthenticationResponse(jwt, "User Login Successful");
+
     }
 
     public  String activeUser(int id){
 
         User user=userRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("User not Found with this ID "+id));
+                .orElseThrow(()-> new RuntimeException("User not Found with this ID "+ id ));
 
         if(user !=null){
             user.setActive(true);
@@ -241,4 +244,5 @@ public class AuthService {
         }
 
     }
+
 }

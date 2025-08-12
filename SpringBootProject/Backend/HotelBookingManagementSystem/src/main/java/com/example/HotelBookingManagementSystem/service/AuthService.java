@@ -1,13 +1,14 @@
-package com.example.Hotel.Booking.Management.service;
+package com.example.HotelBookingManagementSystem.service;
 
 
-import com.example.Hotel.Booking.Management.dto.AuthenticationResponse;
-import com.example.Hotel.Booking.Management.entity.Role;
-import com.example.Hotel.Booking.Management.entity.Token;
-import com.example.Hotel.Booking.Management.entity.User;
-import com.example.Hotel.Booking.Management.jwt.JwtService;
-import com.example.Hotel.Booking.Management.repository.TokenRepository;
-import com.example.Hotel.Booking.Management.repository.UserRepository;
+import com.example.HotelBookingManagementSystem.dto.AuthenticationResponse;
+import com.example.HotelBookingManagementSystem.entity.Customer;
+import com.example.HotelBookingManagementSystem.entity.Role;
+import com.example.HotelBookingManagementSystem.entity.Token;
+import com.example.HotelBookingManagementSystem.entity.User;
+import com.example.HotelBookingManagementSystem.jwt.JwtService;
+import com.example.HotelBookingManagementSystem.repository.TokenRepository;
+import com.example.HotelBookingManagementSystem.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,32 +31,25 @@ import java.util.UUID;
 public class AuthService {
 
     @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
     private UserRepository userRepository;
     @Autowired
-    private  PasswordEncoder passwordEncoder;
+    private TokenRepository tokenRepository;
     @Autowired
-    private  JwtService jwtService;
+    private EmailService emailService;
     @Autowired
-    private  TokenRepository tokenRepository;
+    private CustomerService customerService;
+
     @Autowired
     @Lazy
-    private  AuthenticationManager authenticationManager;
-    @Autowired
-    private  EmailService emailService;
+    private AuthenticationManager authenticationManager;
 
     @Value("src/main/resources/static/images")
     private String uploadDir;
+    @Autowired
+    private JwtService jwtService;
 
-
-    private void saveUserToken(String jwt, User user) {
-        Token token = new Token();
-        token.setToken(jwt);
-        token.setLogout(false);
-        token.setUser(user);
-
-        tokenRepository.save(token);
-
-    }
 
     public void saveOrUpdate(User user, MultipartFile imageFile) {
 
@@ -80,6 +74,8 @@ public class AuthService {
     public void delete(User user) {
         userRepository.delete(user);
     }
+
+
 
     private void sendActivationEmail(User user) {
         String subject = "Welcome to Our Service – Confirm Your Registration";
@@ -153,22 +149,56 @@ public class AuthService {
 
     }
 
-    public void registerUser(User user, MultipartFile imageFile) {
+
+    // for User folder
+    public String saveImageForCustomer(MultipartFile file, Customer customer) {
+
+        Path uploadPath = Paths.get(uploadDir + "/customer");
+        if (!Files.exists(uploadPath)) {
+            try {
+                Files.createDirectory(uploadPath);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        String customerName = customer.getName();
+        String fileName = customerName.trim().replaceAll("\\s+", "_");
+
+        String savedFileName = fileName + "_" + UUID.randomUUID().toString();
+
+        try {
+            Path filePath = uploadPath.resolve(savedFileName);
+            Files.copy(file.getInputStream(), filePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return savedFileName;
+
+    }
+
+
+    public void registerCustomer(User user, MultipartFile imageFile, Customer customerData) throws IOException {
         if (imageFile != null && !imageFile.isEmpty()) {
             // Save image for both User and JobSeeker
             String filename = saveImage(imageFile, user);
-
+            String customerImage = saveImageForCustomer(imageFile, customerData);
+            customerData.setImage(customerImage);
             user.setImage(filename);
         }
 
         // Encode password before saving User
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole(Role.USER);
+        user.setRole(Role.CUSTOMER);
         user.setActive(false);
 
         // Save User FIRST and get persisted instance
         User savedUser = userRepository.save(user);
 
+        // Now, associate saved User with JobSeeker and save JobSeeker
+        customerData.setUser(savedUser);
+        customerService.saveCustomer(customerData);
 
         // Now generate token and save Token associated with savedUser
         String jwt = jwtService.generateToken(savedUser);
@@ -176,6 +206,14 @@ public class AuthService {
 
         // Send Activation Email
         sendActivationEmail(savedUser);
+    }
+
+    private void saveUserToken(String jwt, User user) {
+        Token token = new Token();
+        token.setToken(jwt);
+        token.setLogout(false);
+        token.setUser(user);
+        tokenRepository.save(token);
     }
 
     private void removeAllTokenByUser(User user) {
@@ -225,6 +263,7 @@ public class AuthService {
         return new AuthenticationResponse(jwt, "User Login Successful");
     }
 
+
     public  String activeUser(int id){
 
         User user=userRepository.findById(id)
@@ -241,4 +280,5 @@ public class AuthService {
         }
 
     }
+
 }

@@ -23,19 +23,17 @@ public class HotelAdmin {
     private String address;
     private String image;
 
-    @OneToMany
-    @JoinColumn(name = "hotel_id")
-    private List<Hotel> hotels;
-
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "hotelAdmin", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Hotel> hotels;
 
     public HotelAdmin() {
     }
 
-    public HotelAdmin(int id, String name, String email, String password, String phone, String address, String image, List<Hotel> hotels, User user) {
+    public HotelAdmin(int id, String name, String email, String password, String phone, String address, String image, User user, List<Hotel> hotels) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -43,9 +41,8 @@ public class HotelAdmin {
         this.phone = phone;
         this.address = address;
         this.image = image;
-        this.hotels = hotels;
         this.user = user;
-
+        this.hotels = hotels;
     }
 
     public int getId() {
@@ -104,19 +101,19 @@ public class HotelAdmin {
         this.image = image;
     }
 
-    public List<Hotel> getHotels() {
-        return hotels;
-    }
-
-    public void setHotels(List<Hotel> hotels) {
-        this.hotels = hotels;
-    }
-
     public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Hotel> getHotels() {
+        return hotels;
+    }
+
+    public void setHotels(List<Hotel> hotels) {
+        this.hotels = hotels;
     }
 }

@@ -1,19 +1,14 @@
-package com.example.HotelBookingManagementSystem.entity;
+package com.example.HotelBookingManagementSystem.dto;
 
-
-import jakarta.persistence.*;
+import com.example.HotelBookingManagementSystem.entity.Customer;
+import jakarta.persistence.Column;
 
 import java.sql.Date;
 
-@Entity
-@Table(name = "customers")
-public class Customer {
+public class CustomerDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    @Column(unique = true, nullable = false)
     private String email;
     private String password;
     private String phone;
@@ -22,24 +17,21 @@ public class Customer {
     private Date dateOfBirth;
     private String image;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
 
-    public Customer() {
+    public CustomerDTO() {
     }
 
-    public Customer(Long id, String name, String email, String password, String phone, String address, String gender, Date dateOfBirth, String image, User user) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-        this.address = address;
-        this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
-        this.image = image;
-        this.user = user;
+    public CustomerDTO(Customer customer) {
+        this.id = customer.getId();
+        this.name = customer.getName();
+        this.email = customer.getEmail();
+        this.password = customer.getPassword();
+        this.phone = customer.getPhone();
+        this.address = customer.getAddress();
+        this.gender = customer.getGender();
+        this.dateOfBirth = customer.getDateOfBirth();
+        this.image = customer.getImage();
+
     }
 
     public Long getId() {
@@ -112,13 +104,5 @@ public class Customer {
 
     public void setImage(String image) {
         this.image = image;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

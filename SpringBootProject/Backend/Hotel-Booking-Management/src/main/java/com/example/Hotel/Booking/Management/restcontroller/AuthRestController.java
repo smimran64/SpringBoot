@@ -1,10 +1,10 @@
-package com.emranhss.project.rescontroller;
+package com.example.Hotel.Booking.Management.restcontroller;
 
 
-import com.emranhss.project.dto.AuthenticationResponse;
-import com.emranhss.project.entity.User;
-import com.emranhss.project.repository.ITokenRepository;
-import com.emranhss.project.service.AuthService;
+import com.example.Hotel.Booking.Management.dto.AuthenticationResponse;
+import com.example.Hotel.Booking.Management.entity.User;
+import com.example.Hotel.Booking.Management.repository.TokenRepository;
+import com.example.Hotel.Booking.Management.service.AuthService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,16 +18,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@RestController
-@RequestMapping("/api/auth/")
+@RestController("/api/auth/")
 public class AuthRestController {
 
     @Autowired
     private AuthService authService;
 
-
     @Autowired
-    ITokenRepository tokenRepository;
+    TokenRepository tokenRepository;
 
     @PostMapping("save")
     public ResponseEntity<Map<String, String>> saveUser(
@@ -53,20 +51,17 @@ public class AuthRestController {
 
     }
 
-
     @GetMapping("all")
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = authService.findAll();
         return ResponseEntity.ok(users);
     }
 
-
     @PostMapping("login")
     public ResponseEntity<AuthenticationResponse>  login(@RequestBody User request){
         return ResponseEntity.ok(authService.authenticate(request));
 
     }
-
 
     @GetMapping("/active/{id}")
     public ResponseEntity<String> activeUser(@PathVariable("id") int id){
@@ -92,6 +87,5 @@ public class AuthRestController {
 
         return ResponseEntity.ok("Logged out successfully.");
     }
-
 
 }

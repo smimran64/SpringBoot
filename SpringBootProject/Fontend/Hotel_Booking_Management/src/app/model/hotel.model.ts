@@ -8,6 +8,7 @@ export interface Hotel {
     maximumPrice: number;
     minimumPrice: number;
     rating: string;
+    hotel_admin_id: number;
 
     location: {
 
@@ -15,7 +16,9 @@ export interface Hotel {
         name: string;
         image: string;
 
-    }
+    },
+
+    
 
 
 }
