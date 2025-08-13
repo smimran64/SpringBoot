@@ -1,9 +1,9 @@
 package com.example.HotelBookingManagementSystem.restcontroller;
 
 
-import com.example.HotelBookingManagementSystem.entity.Customer;
 import com.example.HotelBookingManagementSystem.entity.HotelAdmin;
 import com.example.HotelBookingManagementSystem.entity.User;
+import com.example.HotelBookingManagementSystem.repository.HotelAdminRepository;
 import com.example.HotelBookingManagementSystem.repository.UserRepository;
 import com.example.HotelBookingManagementSystem.service.AuthService;
 import com.example.HotelBookingManagementSystem.service.CustomerService;
@@ -24,8 +24,9 @@ import java.util.Map;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/hotelAdmin")
+@RequestMapping("/api/hoteladmin")
 public class HotelAdminRestController {
+
 
     @Autowired
     private UserService userService;
@@ -42,8 +43,17 @@ public class HotelAdminRestController {
     @Autowired
     private CustomerService customerService;
 
+    @Autowired
+    private HotelAdminRepository hotelAdminRepository;
 
-    @PostMapping("/")
+    @GetMapping("")
+    public ResponseEntity<?> getMyHotelAdminProfile(Authentication authentication) {
+        return hotelAdminRepository.findByUserEmail(authentication.getName())
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/reg")
     public ResponseEntity<Map<String, String>> registerHotelAdmin(
             @RequestPart(value = "user") String userJson,
             @RequestPart(value = "hotelAdmin") String hotelAdminJson,
@@ -81,7 +91,7 @@ public class HotelAdminRestController {
 
     }
 
-    @GetMapping("profile")
+    @GetMapping("/profile")
     public ResponseEntity<?> getProfile(Authentication authentication) {
         System.out.println("Authenticated User: " + authentication.getName());
         System.out.println("Authorities: " + authentication.getAuthorities());
@@ -91,6 +101,7 @@ public class HotelAdminRestController {
         return ResponseEntity.ok(hotelAdmin);
 
     }
+
 
 
 }

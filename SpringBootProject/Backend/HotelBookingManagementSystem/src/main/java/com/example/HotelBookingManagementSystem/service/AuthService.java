@@ -80,7 +80,7 @@ public class AuthService {
     private void sendActivationEmail(User user) {
         String subject = "Welcome to Our Service – Confirm Your Registration";
 
-        String activationLink="http://localhost:8085/api/user/active/"+user.getId();
+        String activationLink="http://localhost:8082/api/user/active/"+user.getId();
 
         String mailText = "<!DOCTYPE html>"
                 + "<html>"
@@ -106,7 +106,7 @@ public class AuthService {
                 + "      <br>"
                 + "      <p>Best regards,<br>The Support Team</p>"
                 + "      <p>To Activate Your Account, please click the following link:</p>"
-//                + "      <p><a href=\"" + activationLink + "\">Activate Account</a></p>"
+                + "      <p><a href=\"" + activationLink + "\">Activate Account</a></p>"
                 + "    </div>"
                 + "    <div class='footer'>"
                 + "      &copy; " + java.time.Year.now() + " YourCompany. All rights reserved."

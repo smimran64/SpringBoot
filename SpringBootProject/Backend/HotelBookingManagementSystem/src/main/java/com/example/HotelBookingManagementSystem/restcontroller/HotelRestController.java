@@ -2,6 +2,12 @@ package com.example.HotelBookingManagementSystem.restcontroller;
 
 import com.example.HotelBookingManagementSystem.dto.HotelDTO;
 import com.example.HotelBookingManagementSystem.entity.Hotel;
+import com.example.HotelBookingManagementSystem.entity.HotelAdmin;
+import com.example.HotelBookingManagementSystem.entity.Location;
+import com.example.HotelBookingManagementSystem.repository.HotelAdminRepository;
+import com.example.HotelBookingManagementSystem.repository.HotelRepository;
+import com.example.HotelBookingManagementSystem.repository.LocationRepository;
+import com.example.HotelBookingManagementSystem.repository.UserRepository;
 import com.example.HotelBookingManagementSystem.service.HotelService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,6 +31,15 @@ public class HotelRestController {
     @Autowired
     private HotelService hotelService;
 
+    @Autowired
+    private HotelRepository hotelRepository;
+
+    @Autowired
+    private HotelAdminRepository hotelAdminRepository;
+
+    @Autowired
+    private LocationRepository locationRepository;
+
 
     @GetMapping("/all")
     public ResponseEntity<List<HotelDTO>> getAllHotels() {
@@ -31,34 +47,68 @@ public class HotelRestController {
         return ResponseEntity.ok(hotels);
     }
 
+
+
     @PostMapping("/save")
-    public ResponseEntity<Map<String, String>>saveHotel(
-            @RequestPart(value = "hotel") String hotelJson,
-            @RequestParam(value = "image")MultipartFile file
-            )throws JsonProcessingException{
-
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        Hotel hotel = objectMapper.readValue(hotelJson, Hotel.class);
-
+    public ResponseEntity<?> saveHotel(
+            @RequestPart("hotel") Hotel hotel,
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            Authentication authentication
+    ) {
         try {
-            hotelService.saveHotel(hotel,file);
+            // Get logged-in admin from authentication
+            String username = authentication.getName();
+            HotelAdmin admin = hotelAdminRepository.findByUserEmail(username)
+                    .orElseThrow(() -> new RuntimeException("Admin not found"));
 
-            Map<String,String> response = new HashMap<>();
-            response.put("Message","Hotel has been saved successfully");
+            // Save hotel with admin info
+            hotelService.saveHotel(hotel, image, admin);
 
-            return new ResponseEntity<>(response, HttpStatus.OK);
+            return ResponseEntity.ok(Map.of("Message", "Hotel saved successfully"));
 
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("Message", e.getMessage()));
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("Message", "Image upload failed", "Error", e.getMessage()));
         } catch (Exception e) {
-
-            Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("Message", "Hotel save failed");
-
-            return new ResponseEntity<>(errorResponse, HttpStatus.OK);
-
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("Message", "Hotel save failed", "Error", e.getMessage()));
         }
-
     }
+
+
+
+
+
+//    public ResponseEntity<Map<String, String>>saveHotel(
+//            @RequestPart(value = "hotel") String hotelJson,
+//            @RequestParam(value = "image")MultipartFile file
+//            )throws JsonProcessingException{
+//
+//        ObjectMapper objectMapper = new ObjectMapper();
+//
+//        Hotel hotel = objectMapper.readValue(hotelJson, Hotel.class);
+//
+//        try {
+//            hotelService.saveHotel(hotel,file);
+//
+//            Map<String,String> response = new HashMap<>();
+//            response.put("Message","Hotel has been saved successfully");
+//
+//            return new ResponseEntity<>(response, HttpStatus.OK);
+//
+//        } catch (Exception e) {
+//
+//            Map<String, String> errorResponse = new HashMap<>();
+//            errorResponse.put("Message", "Hotel save failed");
+//
+//            return new ResponseEntity<>(errorResponse, HttpStatus.OK);
+//
+//        }
+//
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Hotel> findHotelById(@PathVariable int id) {

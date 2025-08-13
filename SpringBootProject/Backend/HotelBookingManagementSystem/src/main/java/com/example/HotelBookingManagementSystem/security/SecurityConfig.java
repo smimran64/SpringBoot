@@ -37,8 +37,9 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/api/auth/**","/images/**","/api/customer/**","/api/customer/","/api/hotelAdmin/**","/api/hotel/all"
-                                ,"/api/active/**","/api/location/save","/api/location/all","/api/login","/api/hotel/save","/api/hotel/searchByHotelAdminId",
-                                "/api/location/delete/**").permitAll()
+                                ,"/api/active/**","/api/user/active/**","/api/location/save","/api/location/all","/api/login","/api/hotel/searchByHotelAdminId",
+                                "/api/location/delete/**", "/api/hoteladmin/reg", "/api/hoteladmin/profile").permitAll()
+                        .requestMatchers("/api/hotel/save").hasRole("HOTEL_ADMIN")
 
                         .anyRequest().authenticated()
                 )

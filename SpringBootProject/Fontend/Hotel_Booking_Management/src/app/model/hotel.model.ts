@@ -1,28 +1,14 @@
 
 
+
 export interface Hotel {
-    id: number;
+    id? : number;
     name: string;
-    image: string;
     address: string;
     rating: string;
-
-    location: {
-
-        id: number;
-        name: string;
-        image: string;
-
-    },
-
-    hotelAdmin: {
-
-        id: number;
-        name: string;
-
-    }
-
-
-
-
+    image?: string;
+    location: { id: number };
+    hotelAdmin?: { id: number }; // optional, backend attaches automatically
 }
+
+

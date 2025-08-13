@@ -49,26 +49,42 @@ public class HotelService {
     }
 
 
-    public void saveHotel(Hotel hotel, MultipartFile imageFile) throws IOException {
+//    public void saveHotel(Hotel hotel, MultipartFile imageFile) throws IOException {
+//
+//        if (imageFile!= null && !imageFile.isEmpty()) {
+//            String imageFileName = saveImage(imageFile,hotel);
+//
+//            hotel.setImage(imageFileName);
+//        }
+//
+//        Location location = locationRepository.findById(hotel.getLocation().getId())
+//                .orElseThrow(() -> new EntityNotFoundException("Location with id: " + hotel.getLocation().getId() + " not found!"));
+//
+//        hotel.setLocation(location);
+//
+//        HotelAdmin hotelAdmin = hotelAdminRepository.findById(hotel.getHotelAdmin().getId())
+//                        .orElseThrow(() -> new EntityNotFoundException("HotelAdmin with id: " + hotel.getHotelAdmin().getId() + " not found!"));
+//        hotel.setHotelAdmin(hotelAdmin);
+//
+//        hotelRepository.save(hotel);
+//    }
 
-        if (imageFile!= null && !imageFile.isEmpty()) {
-            String imageFileName = saveImage(imageFile,hotel);
 
+    public void saveHotel(Hotel hotel, MultipartFile imageFile, HotelAdmin admin) throws IOException {
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String imageFileName = saveImage(imageFile, hotel);
             hotel.setImage(imageFileName);
         }
 
         Location location = locationRepository.findById(hotel.getLocation().getId())
                 .orElseThrow(() -> new EntityNotFoundException("Location with id: " + hotel.getLocation().getId() + " not found!"));
-
         hotel.setLocation(location);
 
-        HotelAdmin hotelAdmin = hotelAdminRepository.findById(hotel.getHotelAdmin().getId())
-                        .orElseThrow(() -> new EntityNotFoundException("HotelAdmin with id: " + hotel.getHotelAdmin().getId() + " not found!"));
-        hotel.setHotelAdmin(hotelAdmin);
+
+        hotel.setHotelAdmin(admin);
 
         hotelRepository.save(hotel);
     }
-
 
 
     public Hotel findHotelById(int id) {
@@ -85,7 +101,7 @@ public class HotelService {
     }
 
 
-    public List<Hotel>findHotelByLocationName(String locationName) {
+    public List<Hotel> findHotelByLocationName(String locationName) {
         return hotelRepository.findHotelByLocationName(locationName);
     }
 
@@ -116,8 +132,8 @@ public class HotelService {
         existingHotel.setHotelAdmin(hotelAdmin);
         //update image
 
-        if (imageFile!= null && !imageFile.isEmpty()) {
-            String fileName = saveImage(imageFile,existingHotel);
+        if (imageFile != null && !imageFile.isEmpty()) {
+            String fileName = saveImage(imageFile, existingHotel);
 
             existingHotel.setImage(fileName);
         }
@@ -135,16 +151,15 @@ public class HotelService {
     }
 
 
+    private String saveImage(MultipartFile file, Hotel hotel) throws IOException {
 
-    private  String saveImage(MultipartFile file, Hotel hotel) throws IOException {
-
-        Path uploadPath = Paths.get(uploadDir+ "/hotels");
+        Path uploadPath = Paths.get(uploadDir + "/hotels");
 
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
         }
 
-        String fileName = hotel.getName()+"_"+ UUID.randomUUID();
+        String fileName = hotel.getName() + "_" + UUID.randomUUID();
 
         Path filePath = uploadPath.resolve(fileName);
 

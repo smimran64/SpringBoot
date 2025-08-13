@@ -11,7 +11,7 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class HotelAdminService {
 
-  private baseUrl = environments.apiUrl + '/api/hotelAdmin';
+  private baseUrl = environments.apiUrl + '/api/hoteladmin/reg';
 
 
   constructor(

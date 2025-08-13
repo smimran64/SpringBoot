@@ -17,7 +17,6 @@ export class Viewalllocation implements OnInit {
 
   constructor(
     private locationService: LocationService,
-
     private router: Router,
     private cdr: ChangeDetectorRef
   
