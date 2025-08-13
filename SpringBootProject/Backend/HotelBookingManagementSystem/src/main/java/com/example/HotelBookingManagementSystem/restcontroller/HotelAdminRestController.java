@@ -43,7 +43,7 @@ public class HotelAdminRestController {
     private CustomerService customerService;
 
 
-    @PostMapping("")
+    @PostMapping("/")
     public ResponseEntity<Map<String, String>> registerHotelAdmin(
             @RequestPart(value = "user") String userJson,
             @RequestPart(value = "hotelAdmin") String hotelAdminJson,

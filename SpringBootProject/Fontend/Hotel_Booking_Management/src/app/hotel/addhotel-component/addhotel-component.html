@@ -1,1 +1,62 @@
-<p>addhotel-component works!</p>
+<div class="add-hotel-container">
+    <h2>Add New Hotel</h2>
+
+    <form [formGroup]="hotelForm" (ngSubmit)="saveHotel()" class="hotel-form">
+
+        <!-- Hotel Name -->
+        <div class="form-group">
+            <label>Hotel Name:</label>
+            <input type="text" formControlName="name" placeholder="Enter hotel name" />
+        </div>
+
+        <!-- Address -->
+        <div class="form-group">
+            <label>Address:</label>
+            <input type="text" formControlName="address" placeholder="Enter address" />
+        </div>
+
+        <!-- Rating -->
+        <div class="form-group">
+            <label>Rating:</label>
+            <input type="text" formControlName="rating" placeholder="Enter rating" />
+        </div>
+
+        <!-- Location Dropdown -->
+        <div class="form-group">
+            <label>Location:</label>
+            <select formControlName="locationId">
+                <option value="" disabled>Select Location</option>
+                <option *ngFor="let loc of locations" [value]="loc.id">
+                    {{ loc.name }}
+                </option>
+            </select>
+        </div>
+
+        <!-- Hotel Admin (Auto Fill) -->
+        <div class="form-group">
+            <label>Hotel Admin ID:</label>
+            <input type="number" formControlName="hotelAdminId" readonly />
+        </div>
+
+        <div class="form-group">
+            <label>Hotel Admin Name:</label>
+            <input type="text" formControlName="hotelAdminName" readonly />
+        </div>
+
+        <!-- Image Upload -->
+        <div class="form-group">
+            <label>Hotel Image:</label>
+            <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+        </div>
+
+        <!-- Message -->
+        <div class="form-message" *ngIf="message">
+            {{ message }}
+        </div>
+
+        <!-- Submit -->
+        <div class="form-actions">
+            <button type="submit" [disabled]="hotelForm.invalid">Save Hotel</button>
+        </div>
+    </form>
+</div>

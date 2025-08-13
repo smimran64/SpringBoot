@@ -29,23 +29,29 @@ export class Login implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.loginForm.invalid) {
-      return;
-    }
+  if (this.loginForm.invalid) {
+    return;
+  }
 
-    const { email, password } = this.loginForm.value;
+  const { email, password } = this.loginForm.value;
 
-    this.authService.login(email, password).subscribe({
-      next: (response) => {
+  this.authService.login(email, password).subscribe({
+    next: (response) => {
+      if (response.token) {
         this.successMessage = 'Login successful!';
         this.errorMessage = null;
-        this.router.navigate(['/jobsekpro']); // Redirect to home or another route after login
-      },
-      error: (err) => {
-        this.errorMessage = 'Login failed. Please check your credentials.';
+        this.router.navigate(['/addhotel']);
+      } else {
+        this.errorMessage = response.message || 'Login failed.';
         this.successMessage = null;
       }
-    });
-  }
+    },
+    error: (err) => {
+      this.errorMessage = 'Login failed. Please check your credentials.';
+      this.successMessage = null;
+    }
+  });
+}
+
 
 }

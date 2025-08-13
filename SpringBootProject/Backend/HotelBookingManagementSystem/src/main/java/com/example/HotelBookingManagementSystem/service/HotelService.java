@@ -1,6 +1,7 @@
 package com.example.HotelBookingManagementSystem.service;
 
 
+import com.example.HotelBookingManagementSystem.dto.HotelDTO;
 import com.example.HotelBookingManagementSystem.entity.Hotel;
 import com.example.HotelBookingManagementSystem.entity.HotelAdmin;
 import com.example.HotelBookingManagementSystem.entity.Location;
@@ -19,6 +20,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class HotelService {
@@ -33,9 +35,17 @@ public class HotelService {
     @Value("src/main/resources/static/images")
     private String uploadDir;
 
-    public List<Hotel> getAllHotels() {
-
-        return hotelRepository.findAll();
+    public List<HotelDTO> getAllHotels() {
+        List<Hotel> hotels = hotelRepository.findAll();
+        return hotels.stream()
+                .map(hotel -> new HotelDTO(
+                        hotel.getId(),
+                        hotel.getName(),
+                        hotel.getAddress(),
+                        hotel.getRating(),
+                        hotel.getImage()
+                ))
+                .collect(Collectors.toList());
     }
 
 
@@ -77,6 +87,10 @@ public class HotelService {
 
     public List<Hotel>findHotelByLocationName(String locationName) {
         return hotelRepository.findHotelByLocationName(locationName);
+    }
+
+    public List<Hotel> findHotelByAdminId(String HotelAdminId) {
+        return hotelRepository.findHotelByHotelAdminId(HotelAdminId);
     }
 
     public Hotel updateHotel(int id, Hotel updatehotel, MultipartFile imageFile) throws IOException {

@@ -17,6 +17,8 @@ import { Footer } from './layout/footer/footer';
 import { AboutHotel } from './layout/about-hotel/about-hotel';
 import { Login } from './auth/login/login';
 import { Logout } from './auth/logout/logout';
+import { HotelAdminRegComponent } from './hotelAdmin/hotel-admin-reg-component/hotel-admin-reg-component';
+import { ViewAllHotelAdmin } from './hotelAdmin/view-all-hotel-admin/view-all-hotel-admin';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { Logout } from './auth/logout/logout';
     Footer,
     AboutHotel,
     Login,
-    Logout
+    Logout,
+    HotelAdminRegComponent,
+    ViewAllHotelAdmin
   ],
   imports: [
     BrowserModule,

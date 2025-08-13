@@ -3,6 +3,7 @@ package com.example.HotelBookingManagementSystem.entity;
 
 import jakarta.persistence.*;
 
+import java.sql.Date;
 import java.util.List;
 
 @Entity
@@ -18,9 +19,10 @@ public class HotelAdmin {
 
     @Column(unique = true, nullable = false)
     private String email;
-    private String password;
     private String phone;
     private String address;
+    private String gender;
+    private Date dateOfBirth;
     private String image;
 
     @OneToOne
@@ -33,13 +35,14 @@ public class HotelAdmin {
     public HotelAdmin() {
     }
 
-    public HotelAdmin(int id, String name, String email, String password, String phone, String address, String image, User user, List<Hotel> hotels) {
+    public HotelAdmin(int id, String name, String email, String phone, String address, String gender, Date dateOfBirth, String image, User user, List<Hotel> hotels) {
         this.id = id;
         this.name = name;
         this.email = email;
-        this.password = password;
         this.phone = phone;
         this.address = address;
+        this.gender = gender;
+        this.dateOfBirth = dateOfBirth;
         this.image = image;
         this.user = user;
         this.hotels = hotels;
@@ -69,14 +72,6 @@ public class HotelAdmin {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getPhone() {
         return phone;
     }
@@ -91,6 +86,22 @@ public class HotelAdmin {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getImage() {

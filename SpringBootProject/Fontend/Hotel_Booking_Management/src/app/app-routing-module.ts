@@ -5,12 +5,16 @@ import { Viewalllocation } from './location/viewalllocation/viewalllocation';
 import { EditLocationComponent } from './location/edit-location-component/edit-location-component';
 import { CustomerRegComponent } from './customer/customer-reg-component/customer-reg-component';
 import { Login } from './auth/login/login';
+import { HotelAdminRegComponent } from './hotelAdmin/hotel-admin-reg-component/hotel-admin-reg-component';
+import { AddhotelComponent } from './hotel/addhotel-component/addhotel-component';
 
 const routes: Routes = [
   {path: 'addlocation', component: AddlocationComponent},
   {path: '', component: Viewalllocation},
   {path: 'editlocation/:id', component: EditLocationComponent},
+  {path: 'addhotel', component: AddhotelComponent},
   {path: 'customerReg', component: CustomerRegComponent},
+  {path: 'hotelAdminReg', component: HotelAdminRegComponent},
   {path: 'login', component: Login},
 
 ];

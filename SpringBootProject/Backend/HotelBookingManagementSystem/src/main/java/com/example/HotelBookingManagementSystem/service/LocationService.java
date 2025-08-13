@@ -1,6 +1,7 @@
 package com.example.HotelBookingManagementSystem.service;
 
 
+import com.example.HotelBookingManagementSystem.dto.LocationDTO;
 import com.example.HotelBookingManagementSystem.entity.Location;
 import com.example.HotelBookingManagementSystem.repository.LocationRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -15,6 +16,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class LocationService {
@@ -27,9 +29,11 @@ public class LocationService {
     @Value("src/main/resources/static/images")
     private String uploadDir;
 
-    public List<Location> getAllLocations() {
-
-        return locationRepository.findAll();
+    public List<LocationDTO> getAllLocations() {
+        return locationRepository.findAll()
+                .stream()
+                .map(loc -> new LocationDTO(loc.getId(), loc.getName(), loc.getImage()))
+                .collect(Collectors.toList());
     }
 
 

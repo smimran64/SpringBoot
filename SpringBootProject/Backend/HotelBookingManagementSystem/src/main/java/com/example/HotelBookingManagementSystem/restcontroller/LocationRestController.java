@@ -1,5 +1,6 @@
 package com.example.HotelBookingManagementSystem.restcontroller;
 
+import com.example.HotelBookingManagementSystem.dto.LocationDTO;
 import com.example.HotelBookingManagementSystem.entity.Location;
 import com.example.HotelBookingManagementSystem.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,9 @@ public class LocationRestController {
     @Autowired
     private LocationService locationService;
 
-
-    @GetMapping("/")
-    public ResponseEntity<List<Location>> getAllLocations() {
-
-        List<Location> locationList = locationService.getAllLocations();
-        return ResponseEntity.ok().body(locationList);
+    @GetMapping("/all")
+    public ResponseEntity<List<LocationDTO>> getAllLocations() {
+        return ResponseEntity.ok(locationService.getAllLocations());
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.HotelBookingManagementSystem.restcontroller;
 
+import com.example.HotelBookingManagementSystem.dto.HotelDTO;
 import com.example.HotelBookingManagementSystem.entity.Hotel;
 import com.example.HotelBookingManagementSystem.service.HotelService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,9 +25,9 @@ public class HotelRestController {
     private HotelService hotelService;
 
 
-    @GetMapping("/")
-    public ResponseEntity<List<Hotel>> getAllHotels() {
-        List<Hotel> hotels = hotelService.getAllHotels();
+    @GetMapping("/all")
+    public ResponseEntity<List<HotelDTO>> getAllHotels() {
+        List<HotelDTO> hotels = hotelService.getAllHotels();
         return ResponseEntity.ok(hotels);
     }
 
@@ -77,6 +78,12 @@ public class HotelRestController {
     public ResponseEntity<List<Hotel>> findHotelByLocationName(@RequestParam(value = "locationName") String locationName) {
 
         List<Hotel> hotels = hotelService.findHotelByLocationName(locationName);
+        return ResponseEntity.ok(hotels);
+    }
+
+    @GetMapping("/searchByHotelAdminId")
+    public ResponseEntity<List<Hotel>> findHotelByHotelAdminId(@RequestParam(value = "hotelAdminId") String hotelAdminId) {
+        List<Hotel> hotels = hotelService.findHotelByAdminId(hotelAdminId);
         return ResponseEntity.ok(hotels);
     }
 
