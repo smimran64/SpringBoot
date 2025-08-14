@@ -15,23 +15,20 @@ export class Viewallhotelcomponent implements OnInit {
   errorMessage: string = '';
   loading: boolean = false;
 
-
   constructor(
     private hotelService: HotelService,
     private router: Router,
     private cdr: ChangeDetectorRef
-
-
   ) { }
+
   ngOnInit(): void {
     this.loadHotels();
   }
 
-
   loadHotels(): void {
     this.loading = true;
     this.hotelService.getAllHotel().subscribe({
-      next: (data: any) => {
+      next: (data: Hotel[]) => { // type safe
         this.hotels = data;
         this.loading = false;
         this.cdr.markForCheck();
@@ -44,13 +41,12 @@ export class Viewallhotelcomponent implements OnInit {
     });
   }
 
-
-
   // Delete method
   deleteHotels(id: number): void {
     if (confirm('Are you sure you want to delete this Hotel?')) {
       this.hotelService.deleteHotels(id).subscribe({
         next: () => {
+          alert('Hotel deleted successfully');
           this.loadHotels(); // refresh list
           this.cdr.markForCheck();
         },
@@ -62,10 +58,9 @@ export class Viewallhotelcomponent implements OnInit {
     }
   }
 
-
-// Edit method
+  // Edit method
   editHotel(id: number): void {
-    this.router.navigate(['/editHotel', id]); 
+    this.router.navigate(['/editHotel', id]);
   }
 
 }

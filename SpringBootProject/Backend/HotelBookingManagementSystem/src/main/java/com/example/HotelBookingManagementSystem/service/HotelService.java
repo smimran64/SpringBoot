@@ -38,50 +38,43 @@ public class HotelService {
     public List<HotelDTO> getAllHotels() {
         List<Hotel> hotels = hotelRepository.findAll();
         return hotels.stream()
-                .map(hotel -> new HotelDTO(
-                        hotel.getId(),
-                        hotel.getName(),
-                        hotel.getAddress(),
-                        hotel.getRating(),
-                        hotel.getImage()
-                ))
+                .map(hotel -> {
+                    HotelDTO dto = new HotelDTO(
+                            hotel.getId(),
+                            hotel.getName(),
+                            hotel.getAddress(),
+                            hotel.getRating(),
+                            hotel.getImage()
+                    );
+                    dto.setLocationName(hotel.getLocation() != null ? hotel.getLocation().getName() : "");
+                    return dto;
+                })
                 .collect(Collectors.toList());
     }
 
 
-//    public void saveHotel(Hotel hotel, MultipartFile imageFile) throws IOException {
-//
-//        if (imageFile!= null && !imageFile.isEmpty()) {
-//            String imageFileName = saveImage(imageFile,hotel);
-//
-//            hotel.setImage(imageFileName);
-//        }
-//
-//        Location location = locationRepository.findById(hotel.getLocation().getId())
-//                .orElseThrow(() -> new EntityNotFoundException("Location with id: " + hotel.getLocation().getId() + " not found!"));
-//
-//        hotel.setLocation(location);
-//
-//        HotelAdmin hotelAdmin = hotelAdminRepository.findById(hotel.getHotelAdmin().getId())
-//                        .orElseThrow(() -> new EntityNotFoundException("HotelAdmin with id: " + hotel.getHotelAdmin().getId() + " not found!"));
-//        hotel.setHotelAdmin(hotelAdmin);
-//
-//        hotelRepository.save(hotel);
-//    }
 
 
-    public void saveHotel(Hotel hotel, MultipartFile imageFile, HotelAdmin admin) throws IOException {
+
+    // Save Hotel
+    public void saveHotel(HotelDTO dto, MultipartFile imageFile, HotelAdmin admin) throws IOException {
+        Hotel hotel = new Hotel();
+        hotel.setName(dto.getName());
+        hotel.setAddress(dto.getAddress());
+        hotel.setRating(dto.getRating());
+
+        // Location fetch by locationId
+        Location location = locationRepository.findById(dto.getLocationId())
+                .orElseThrow(() -> new EntityNotFoundException("Location not found!"));
+        hotel.setLocation(location);
+
+        hotel.setHotelAdmin(admin);
+
+        // Image save
         if (imageFile != null && !imageFile.isEmpty()) {
             String imageFileName = saveImage(imageFile, hotel);
             hotel.setImage(imageFileName);
         }
-
-        Location location = locationRepository.findById(hotel.getLocation().getId())
-                .orElseThrow(() -> new EntityNotFoundException("Location with id: " + hotel.getLocation().getId() + " not found!"));
-        hotel.setLocation(location);
-
-
-        hotel.setHotelAdmin(admin);
 
         hotelRepository.save(hotel);
     }

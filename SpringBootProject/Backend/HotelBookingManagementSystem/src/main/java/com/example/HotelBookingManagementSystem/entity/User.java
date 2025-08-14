@@ -18,8 +18,6 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-
-    @Column(unique = true, nullable = false)
     private String email;
     private String password;
     private String phone;
@@ -50,6 +48,7 @@ public class User implements UserDetails {
         this.active = active;
         this.isLock = isLock;
     }
+
 
     public int getId() {
         return id;

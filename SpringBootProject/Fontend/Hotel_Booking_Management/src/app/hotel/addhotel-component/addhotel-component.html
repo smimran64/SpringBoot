@@ -7,18 +7,27 @@
         <div class="form-group">
             <label>Hotel Name:</label>
             <input type="text" formControlName="name" placeholder="Enter hotel name" />
+            <div *ngIf="hotelForm.get('name')?.invalid && hotelForm.get('name')?.touched" class="text-danger">
+                Hotel name is required
+            </div>
         </div>
 
         <!-- Address -->
         <div class="form-group">
             <label>Address:</label>
             <input type="text" formControlName="address" placeholder="Enter address" />
+            <div *ngIf="hotelForm.get('address')?.invalid && hotelForm.get('address')?.touched" class="text-danger">
+                Address is required
+            </div>
         </div>
 
         <!-- Rating -->
         <div class="form-group">
             <label>Rating:</label>
             <input type="text" formControlName="rating" placeholder="Enter rating" />
+            <div *ngIf="hotelForm.get('rating')?.invalid && hotelForm.get('rating')?.touched" class="text-danger">
+                Rating is required
+            </div>
         </div>
 
         <!-- Location Dropdown -->
@@ -30,33 +39,30 @@
                     {{ loc.name }}
                 </option>
             </select>
+            <div *ngIf="hotelForm.get('locationId')?.invalid && hotelForm.get('locationId')?.touched"
+                class="text-danger">
+                Please select a location
+            </div>
         </div>
-
-        <!-- Hotel Admin (Auto Fill) -->
-        <!-- <div class="form-group">
-            <label>Hotel Admin ID:</label>
-            <input type="number" formControlName="hotelAdminId" readonly />
-        </div>
-
-        <div class="form-group">
-            <label>Hotel Admin Name:</label>
-            <input type="text" formControlName="hotelAdminName" readonly />
-        </div> -->
 
         <!-- Image Upload -->
         <div class="form-group">
             <label>Hotel Image:</label>
             <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+            <div *ngIf="!selectedImage && hotelForm.touched" class="text-danger">
+                Please select an image
+            </div>
         </div>
 
         <!-- Message -->
-        <div class="form-message" *ngIf="message">
+        <div class="form-message text-danger" *ngIf="message">
             {{ message }}
         </div>
 
         <!-- Submit -->
         <div class="form-actions">
-            <button type="submit" [disabled]="hotelForm.invalid">Save Hotel</button>
+            <button type="submit" [disabled]="hotelForm.invalid || !selectedImage">Save Hotel</button>
         </div>
+
     </form>
 </div>

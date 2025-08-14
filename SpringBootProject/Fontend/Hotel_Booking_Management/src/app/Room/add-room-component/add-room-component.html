@@ -1,0 +1,62 @@
+<div class="room-form-container">
+  <h2>Add Room</h2>
+
+  <form [formGroup]="roomForm" (ngSubmit)="saveRoom()" class="room-form">
+    <!-- Room Type -->
+    <div class="form-group">
+      <label>Room Type</label>
+      <input type="text" formControlName="roomType" placeholder="Enter room type" />
+    </div>
+
+    <!-- Total Rooms -->
+    <div class="form-group">
+      <label>Total Rooms</label>
+      <input type="number" formControlName="totalRooms" placeholder="Enter total rooms" />
+    </div>
+
+    <!-- Adults -->
+    <div class="form-group">
+      <label>Adults</label>
+      <input type="number" formControlName="adults" placeholder="No. of adults" />
+    </div>
+
+    <!-- Children -->
+    <div class="form-group">
+      <label>Children</label>
+      <input type="number" formControlName="children" placeholder="No. of children" />
+    </div>
+
+    <!-- Price -->
+    <div class="form-group">
+      <label>Price</label>
+      <input type="number" formControlName="price" placeholder="Enter price" />
+    </div>
+
+    <!-- Hotel Dropdown -->
+    <div class="form-group">
+      <label>Hotel</label>
+      <select formControlName="hotelId">
+        <option value="">Select hotel</option>
+        <option *ngFor="let hotel of hotels" [value]="hotel.id">{{ hotel.name }}</option>
+      </select>
+    </div>
+
+    <!-- Image Upload -->
+    <div class="form-group">
+      <label>Room Image</label>
+      <input type="file" (change)="onImageSelected($event)" />
+    </div>
+
+    <!-- Error Message -->
+    <div class="error-message" *ngIf="message">
+      {{ message }}
+    </div>
+
+    <!-- Buttons -->
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <button type="reset" class="btn btn-secondary">Reset</button>
+    </div>
+  </form>
+</div>
+

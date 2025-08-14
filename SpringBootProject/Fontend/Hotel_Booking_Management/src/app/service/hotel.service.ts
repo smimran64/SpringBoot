@@ -9,7 +9,7 @@ import { Hotel } from '../model/hotel.model';
 })
 export class HotelService {
 
-  baseUrl: string = environments.apiUrl + '/api/hotel/';
+  baseUrl: string = environments.apiUrl + '/api/hotel';
 
   constructor(
     private http: HttpClient,
@@ -17,12 +17,12 @@ export class HotelService {
   ) { }
 
 
-  getAllHotel(): Observable<any> {
-    return this.http.get(`${this.baseUrl}all`).pipe(
+  getAllHotel(): Observable<Hotel[]> {
+  return this.http.get<Hotel[]>(`${this.baseUrl}all`).pipe(
+    catchError(this.handleError)
+  );
+}
 
-      catchError(this.handleError)
-    );
-  }
 
   // creatHotel(hotel: any, image: File): Observable<any> {
 
@@ -51,7 +51,7 @@ export class HotelService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.post(`${this.baseUrl}save`, formData, { headers })
+    return this.http.post(`${this.baseUrl}/save/`, formData, { headers })
       .pipe(
         catchError(err => {
           console.error('Error saving hotel', err);

@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/")
+@RequestMapping("/api")
 public class AuthRestController {
 
     @Autowired
@@ -61,7 +61,7 @@ public class AuthRestController {
 
 
 
-    @PostMapping("login")
+    @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse>  login(@RequestBody User request){
         return ResponseEntity.ok(authService.authenticate(request));
 

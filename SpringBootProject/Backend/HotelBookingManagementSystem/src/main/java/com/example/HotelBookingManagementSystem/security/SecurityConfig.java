@@ -36,10 +36,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/api/auth/**","/images/**","/api/customer/**","/api/customer/","/api/hotelAdmin/**","/api/hotel/all"
-                                ,"/api/active/**","/api/user/active/**","/api/location/save","/api/location/all","/api/login","/api/hotel/searchByHotelAdminId",
+                        .requestMatchers("/images/**","/api/customer/**","/api/customer/","/api/hotelAdmin/**","/api/hotel/all","/api/login","/api/room/all"
+                                ,"/api/active/**","/api/user/active/**","/api/location/save","/api/location/all","/api/hotel/searchByHotelAdminId",
                                 "/api/location/delete/**", "/api/hoteladmin/reg", "/api/hoteladmin/profile").permitAll()
-                        .requestMatchers("/api/hotel/save").hasRole("HOTEL_ADMIN")
+                        .requestMatchers("/api/hotel/save/","/api/room/save").hasRole("HOTEL_ADMIN")
 
                         .anyRequest().authenticated()
                 )

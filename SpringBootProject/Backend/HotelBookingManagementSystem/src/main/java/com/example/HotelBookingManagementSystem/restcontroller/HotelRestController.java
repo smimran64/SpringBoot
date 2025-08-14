@@ -48,10 +48,9 @@ public class HotelRestController {
     }
 
 
-
-    @PostMapping("/save")
+    @PostMapping("/save/")
     public ResponseEntity<?> saveHotel(
-            @RequestPart("hotel") Hotel hotel,
+            @RequestPart("hotel") HotelDTO hotelDTO,
             @RequestPart(value = "image", required = false) MultipartFile image,
             Authentication authentication
     ) {
@@ -61,8 +60,8 @@ public class HotelRestController {
             HotelAdmin admin = hotelAdminRepository.findByUserEmail(username)
                     .orElseThrow(() -> new RuntimeException("Admin not found"));
 
-            // Save hotel with admin info
-            hotelService.saveHotel(hotel, image, admin);
+            // Save hotel with admin info using DTO
+            hotelService.saveHotel(hotelDTO, image, admin);
 
             return ResponseEntity.ok(Map.of("Message", "Hotel saved successfully"));
 
@@ -78,42 +77,10 @@ public class HotelRestController {
         }
     }
 
-
-
-
-
-//    public ResponseEntity<Map<String, String>>saveHotel(
-//            @RequestPart(value = "hotel") String hotelJson,
-//            @RequestParam(value = "image")MultipartFile file
-//            )throws JsonProcessingException{
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
-//
-//        Hotel hotel = objectMapper.readValue(hotelJson, Hotel.class);
-//
-//        try {
-//            hotelService.saveHotel(hotel,file);
-//
-//            Map<String,String> response = new HashMap<>();
-//            response.put("Message","Hotel has been saved successfully");
-//
-//            return new ResponseEntity<>(response, HttpStatus.OK);
-//
-//        } catch (Exception e) {
-//
-//            Map<String, String> errorResponse = new HashMap<>();
-//            errorResponse.put("Message", "Hotel save failed");
-//
-//            return new ResponseEntity<>(errorResponse, HttpStatus.OK);
-//
-//        }
-//
-//    }
-
     @GetMapping("/{id}")
     public ResponseEntity<Hotel> findHotelById(@PathVariable int id) {
 
-        try{
+        try {
             Hotel hotel = hotelService.findHotelById(id);
             return ResponseEntity.ok(hotel);
 
@@ -139,7 +106,7 @@ public class HotelRestController {
 
 
     @GetMapping("/h/searchhotelname")
-    public ResponseEntity<Hotel>findHotelByName(@RequestParam(value = "name") String name) {
+    public ResponseEntity<Hotel> findHotelByName(@RequestParam(value = "name") String name) {
 
         Hotel hotels = hotelService.findHotelByName(name);
         return ResponseEntity.ok(hotels);
@@ -147,10 +114,10 @@ public class HotelRestController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteHotel(@PathVariable int id) {
-        try{
+        try {
             hotelService.deleteHotel(id);
             return ResponseEntity.ok("Hotel deleted successfully");
-        }catch (EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
@@ -164,7 +131,7 @@ public class HotelRestController {
     )
 
             throws IOException {
-        Hotel updatedHotel = hotelService.updateHotel(id, hotel,file);
+        Hotel updatedHotel = hotelService.updateHotel(id, hotel, file);
         return ResponseEntity.ok(updatedHotel);
     }
 
