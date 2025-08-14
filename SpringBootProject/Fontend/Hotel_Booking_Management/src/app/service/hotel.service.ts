@@ -18,7 +18,7 @@ export class HotelService {
 
 
   getAllHotel(): Observable<Hotel[]> {
-  return this.http.get<Hotel[]>(`${this.baseUrl}all`).pipe(
+  return this.http.get<Hotel[]>(`${this.baseUrl}/all`).pipe(
     catchError(this.handleError)
   );
 }

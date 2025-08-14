@@ -2,7 +2,6 @@ package com.example.HotelBookingManagementSystem.restcontroller;
 
 
 import com.example.HotelBookingManagementSystem.dto.RoomDTO;
-import com.example.HotelBookingManagementSystem.entity.Hotel;
 import com.example.HotelBookingManagementSystem.entity.HotelAdmin;
 import com.example.HotelBookingManagementSystem.entity.Room;
 import com.example.HotelBookingManagementSystem.repository.HotelAdminRepository;
@@ -110,7 +109,4 @@ public class RoomRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Room not found");
         }
     }
-
-
-
 }
