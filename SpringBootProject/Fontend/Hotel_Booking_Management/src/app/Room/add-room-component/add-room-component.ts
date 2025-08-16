@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RoomService } from '../../service/room-service';
 import { HotelService } from '../../service/hotel.service';
@@ -15,56 +15,57 @@ import { Hotel } from '../../model/hotel.model';
 export class AddRoomComponent implements OnInit {
 
 
-  roomForm!: FormGroup;
+  roomForm: FormGroup;
   hotels: Hotel[] = [];
   selectedImage?: File;
   message = '';
+  loading = false;
 
   constructor(
     private fb: FormBuilder,
     private roomService: RoomService,
     private hotelService: HotelService,
-    private router: Router
-  ) { }
-
-  ngOnInit(): void {
-    this.initForm();
-    this.loadHotels();
-  }
-
-  private initForm(): void {
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {
     this.roomForm = this.fb.group({
       roomType: ['', Validators.required],
       totalRooms: [0, [Validators.required, Validators.min(1)]],
       adults: [0, [Validators.required, Validators.min(1)]],
-      children: [0, [Validators.required, Validators.min(0)]],
+      children: [0, Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
-      hotelId: ['', Validators.required]
+      hotelId: [null, Validators.required]
     });
   }
 
+  ngOnInit(): void {
+    this.loadHotels();
+  }
+
   private loadHotels(): void {
-    this.hotelService.getAllHotel().subscribe({
-      next: (data) => {
+    this.loading = true;
+    this.hotelService.getMyHotels().subscribe({
+      next: (data: Hotel[]) => {
         this.hotels = data;
+        this.loading = false;
+        this.cdr.markForCheck();
       },
       error: (err) => {
-        console.error('Error loading hotels:', err);
+        console.error('Hotel loading error', err);
+        this.message = 'Failed to load hotels';
+        this.loading = false;
       }
     });
   }
 
   onImageSelected(event: any): void {
     const file = event.target.files[0];
-    if (file) {
-      this.selectedImage = file;
-    }
+    if (file) this.selectedImage = file;
   }
 
-  // ✅ Save Room
   saveRoom(): void {
     if (this.roomForm.invalid) {
-      this.message = 'Please fill all fields';
+      this.message = 'Please fill all required fields correctly.';
       return;
     }
 
@@ -74,25 +75,32 @@ export class AddRoomComponent implements OnInit {
       adults: this.roomForm.value.adults,
       children: this.roomForm.value.children,
       price: this.roomForm.value.price,
-      hotel: { id: Number(this.roomForm.value.hotelId) }
+      hotel: { id: this.roomForm.value.hotelId }
     };
 
     this.roomService.saveRoom(room, this.selectedImage).subscribe({
       next: () => {
-        alert('Room added successfully');
+        alert('Room saved successfully');
         this.router.navigate(['/rooms']);
       },
       error: (err) => {
-        console.error(err);
-        this.message = 'Error saving room';
+        console.error('Room save error:', err);
+        if (err.status === 403) {
+          this.message = 'You are not authorized. Please login again.';
+        } else if (err.status === 500 && err.error.includes('Role')) {
+          this.message = 'Server Role mapping issue. Contact admin.';
+        } else {
+          this.message = err?.error || 'Room save failed';
+        }
       }
     });
   }
 
-  // ✅ Update Room
+
+
   updateRoom(id: number): void {
     if (this.roomForm.invalid) {
-      this.message = 'Please fill all fields';
+      this.message = 'All fields are required';
       return;
     }
 
@@ -102,8 +110,15 @@ export class AddRoomComponent implements OnInit {
       adults: this.roomForm.value.adults,
       children: this.roomForm.value.children,
       price: this.roomForm.value.price,
-      hotel: { id: Number(this.roomForm.value.hotelId) }
+      hotel: {
+        id: this.roomForm.value.hotelId,
+        name: '',      // optional
+        address: '',   // optional
+        rating: 0,     // optional
+        image: ''      // optional
+      }
     };
+
 
     this.roomService.updateRoom(id, room, this.selectedImage).subscribe({
       next: () => {
@@ -112,21 +127,18 @@ export class AddRoomComponent implements OnInit {
       },
       error: (err) => {
         console.error(err);
-        this.message = 'Error updating room';
+        this.message = err?.error || 'Room update failed';
       }
     });
   }
 
-  // ✅ Delete Room
   deleteRoom(id: number): void {
     if (confirm('Are you sure you want to delete this room?')) {
       this.roomService.deleteRoom(id).subscribe({
-        next: () => {
-          alert('Room deleted successfully');
-        },
+        next: () => alert('Room deleted successfully'),
         error: (err) => {
           console.error(err);
-          this.message = 'Error deleting room';
+          this.message = 'Room delete failed';
         }
       });
     }

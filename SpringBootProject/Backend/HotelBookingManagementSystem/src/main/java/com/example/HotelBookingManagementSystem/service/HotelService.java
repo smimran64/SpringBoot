@@ -2,6 +2,7 @@ package com.example.HotelBookingManagementSystem.service;
 
 
 import com.example.HotelBookingManagementSystem.dto.HotelDTO;
+import com.example.HotelBookingManagementSystem.dto.LocationDTO;
 import com.example.HotelBookingManagementSystem.entity.Hotel;
 import com.example.HotelBookingManagementSystem.entity.HotelAdmin;
 import com.example.HotelBookingManagementSystem.entity.Location;
@@ -37,47 +38,63 @@ public class HotelService {
 
     public List<HotelDTO> getAllHotels() {
         List<Hotel> hotels = hotelRepository.findAll();
-        return hotels.stream()
-                .map(hotel -> {
-                    HotelDTO dto = new HotelDTO(
-                            hotel.getId(),
-                            hotel.getName(),
-                            hotel.getAddress(),
-                            hotel.getRating(),
-                            hotel.getImage()
-                    );
-                    dto.setLocationName(hotel.getLocation() != null ? hotel.getLocation().getName() : "");
-                    return dto;
-                })
-                .collect(Collectors.toList());
+
+        return hotels.stream().map(hotel -> {
+            // Create LocationDTO if location exists
+            LocationDTO locationDTO = null;
+            if (hotel.getLocation() != null) {
+                locationDTO = new LocationDTO(
+                        hotel.getLocation().getId(),
+                        hotel.getLocation().getName(),
+                        hotel.getLocation().getImage()
+                );
+            }
+
+            // Create HotelDTO
+            HotelDTO dto = new HotelDTO(
+                    hotel.getId(),
+                    hotel.getName(),
+                    hotel.getAddress(),
+                    hotel.getRating(),
+                    hotel.getImage(),
+                    locationDTO
+            );
+
+            return dto;
+        }).collect(Collectors.toList());
     }
 
-
-
-
-
-    // Save Hotel
-    public void saveHotel(HotelDTO dto, MultipartFile imageFile, HotelAdmin admin) throws IOException {
+    public Hotel saveHotel(HotelDTO hotelDTO, MultipartFile image, HotelAdmin admin) throws IOException {
         Hotel hotel = new Hotel();
-        hotel.setName(dto.getName());
-        hotel.setAddress(dto.getAddress());
-        hotel.setRating(dto.getRating());
+        hotel.setName(hotelDTO.getName());
+        hotel.setAddress(hotelDTO.getAddress());
+        hotel.setRating(hotelDTO.getRating());
 
-        // Location fetch by locationId
-        Location location = locationRepository.findById(dto.getLocationId())
-                .orElseThrow(() -> new EntityNotFoundException("Location not found!"));
+        // Set Location
+        Location location = locationRepository.findById(hotelDTO.getLocation().getId())
+                .orElseThrow(() -> new RuntimeException("Location not found"));
+
         hotel.setLocation(location);
 
+        // Set Admin
         hotel.setHotelAdmin(admin);
 
-        // Image save
-        if (imageFile != null && !imageFile.isEmpty()) {
-            String imageFileName = saveImage(imageFile, hotel);
-            hotel.setImage(imageFileName);
+        // Handle Image
+        if (image != null && !image.isEmpty()) {
+            Path uploadPath = Paths.get(uploadDir + "/hotels");
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+            Path filePath = uploadPath.resolve(fileName);
+            Files.copy(image.getInputStream(), filePath);
+            hotel.setImage(fileName);
         }
 
-        hotelRepository.save(hotel);
+        return hotelRepository.save(hotel);
     }
+
 
 
     public Hotel findHotelById(int id) {
@@ -98,9 +115,18 @@ public class HotelService {
         return hotelRepository.findHotelByLocationName(locationName);
     }
 
-    public List<Hotel> findHotelByAdminId(String HotelAdminId) {
-        return hotelRepository.findHotelByHotelAdminId(HotelAdminId);
+    public List<HotelDTO> getHotelsByAdminId(int hotelAdminId) {
+        List<Hotel> hotels = hotelRepository.findByHotelAdminId(hotelAdminId);
+        return hotels.stream().map(hotel -> new HotelDTO(
+                hotel.getId(),
+                hotel.getName(),
+                hotel.getAddress(),
+                hotel.getRating(),
+                hotel.getImage(),
+                null
+        )).collect(Collectors.toList());
     }
+
 
     public Hotel updateHotel(int id, Hotel updatehotel, MultipartFile imageFile) throws IOException {
         Hotel existingHotel = hotelRepository.findById(id)
@@ -162,5 +188,28 @@ public class HotelService {
 
 
     }
+
+
+
+//    private String saveImage(MultipartFile file, Hotel hotel) throws IOException {
+//        Path uploadPath = Paths.get(uploadDir + "/hotels");
+//        if (!Files.exists(uploadPath)) {
+//            Files.createDirectories(uploadPath);
+//        }
+//
+//        // Preserve original file extension
+//        String originalExtension = "";
+//        String originalName = file.getOriginalFilename();
+//        if (originalName != null && originalName.contains(".")) {
+//            originalExtension = originalName.substring(originalName.lastIndexOf("."));
+//        }
+//
+//        String fileName = hotel.getName() + "_" + UUID.randomUUID() + originalExtension;
+//
+//        Path filePath = uploadPath.resolve(fileName);
+//        Files.copy(file.getInputStream(), filePath);
+//
+//        return fileName;
+//    }
 
 }

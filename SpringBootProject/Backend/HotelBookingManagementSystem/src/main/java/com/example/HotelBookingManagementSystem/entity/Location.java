@@ -1,8 +1,6 @@
 package com.example.HotelBookingManagementSystem.entity;
 
 import jakarta.persistence.*;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 @Entity

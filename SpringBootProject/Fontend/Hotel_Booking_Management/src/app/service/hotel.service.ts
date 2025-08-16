@@ -3,6 +3,7 @@ import { environments } from '../../environments/environments';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { Hotel } from '../model/hotel.model';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
@@ -13,30 +14,43 @@ export class HotelService {
 
   constructor(
     private http: HttpClient,
-     @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
+  private getToken(): string {
+    if (isPlatformBrowser(this.platformId)) {
+      return localStorage.getItem('authToken') || '';
+    }
+    return '';
+  }
 
-  getAllHotel(): Observable<Hotel[]> {
-  return this.http.get<Hotel[]>(`${this.baseUrl}/all`).pipe(
-    catchError(this.handleError)
-  );
-}
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('authToken') || '';
+    return new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+  }
+
+  // Get logged-in admin hotels
+  getMyHotels(): Observable<Hotel[]> {
+    const headers = this.getAuthHeaders(); // আগে tumi getAuthHeaders method বানিয়েছো
+    return this.http.get<Hotel[]>(`${this.baseUrl}/myHotels`, { headers });
+  }
 
 
-  // creatHotel(hotel: any, image: File): Observable<any> {
 
-  //   const formData = new FormData();
-  //   formData.append('hotel', new Blob([JSON.stringify(hotel)], { type: 'application/json' }));
-  //   formData.append('image', image);
+  getAllHotels(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/all`).pipe(
+      catchError(this.handleError)
+    );
+  }
 
-  //   return this.http.post<any>(this.baseUrl+'save',formData)
-  //   .pipe(catchError(this.handleError));
-
+  // private handleError(error: any) {
+  //   console.error('HotelService Error:', error);
+  //   return throwError(() => error);
   // }
 
-
-
+  // Save hotel with optional image
   saveHotel(hotel: Hotel, imageFile?: File): Observable<any> {
     const formData = new FormData();
     formData.append('hotel', new Blob([JSON.stringify(hotel)], { type: 'application/json' }));
@@ -45,50 +59,40 @@ export class HotelService {
       formData.append('image', imageFile);
     }
 
-    // Add JWT token from localStorage
-    const token = localStorage.getItem('authToken');
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
+    const token = localStorage.getItem('authToken') || '';
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-    return this.http.post(`${this.baseUrl}/save/`, formData, { headers })
-      .pipe(
-        catchError(err => {
-          console.error('Error saving hotel', err);
-          return throwError(() => err);
-        })
-      );
+    return this.http.post(`${this.baseUrl}/save`, formData, { headers })
+      .pipe(catchError(err => throwError(() => err)));
   }
 
+  // Update hotel with optional image
+  updateHotel(id: number, hotel: Hotel, image?: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('hotel', new Blob([JSON.stringify(hotel)], { type: 'application/json' }));
 
-   updateHotel(id: number, hotel: Hotel, image?: File) {
-      const formData = new FormData();
-      formData.append('hotel', new Blob([JSON.stringify(hotel)], { type: 'application/json' }));
-  
-      // Append image only if provided (optional)
-      if (image) {
-        formData.append('image', image);
-      }
-  
-      return this.http.put(this.baseUrl + `/update/${id}`, formData, {
-        responseType: 'text' as 'json'
-      });
+    if (image) {
+      formData.append('image', image);
     }
 
+    const token = localStorage.getItem('authToken') || '';
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
-   deleteHotels(id: number) {
-    return this.http.delete(this.baseUrl + `/delete/${id}`, {
-      responseType: 'text' as 'json'
-    });
+    return this.http.put(`${this.baseUrl}/update/${id}`, formData, { headers, responseType: 'text' as 'json' })
+      .pipe(catchError(err => throwError(() => err)));
   }
 
+  // Delete hotel by id
+  deleteHotel(id: number): Observable<any> {
+    const token = localStorage.getItem('authToken') || '';
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
+    return this.http.delete(`${this.baseUrl}/delete/${id}`, { headers, responseType: 'text' as 'json' })
+      .pipe(catchError(err => throwError(() => err)));
+  }
 
-
-
-
+  // Handle error
   private handleError(error: any) {
-
     console.error('An error occurred:', error);
     return throwError(() => new Error('Something bad happened; please try again later.'));
   }

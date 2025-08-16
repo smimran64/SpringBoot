@@ -12,14 +12,14 @@ import { AddRoomComponent } from './Room/add-room-component/add-room-component';
 
 const routes: Routes = [
   {path: 'addlocation', component: AddlocationComponent},
-  {path: '', component: Viewalllocation},
+  {path: 'viewlocation', component: Viewalllocation},
   {path: 'editlocation/:id', component: EditLocationComponent},
   {path: 'addhotel', component: AddhotelComponent},
   {path: 'viewHotel', component: Viewallhotelcomponent},
   {path: 'addroom', component: AddRoomComponent},
   {path: 'customerReg', component: CustomerRegComponent},
   {path: 'hotelAdminReg', component: HotelAdminRegComponent},
-  {path: 'login', component: Login},
+  {path: '', component: Login},
 
 ];
 

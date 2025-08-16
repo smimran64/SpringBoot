@@ -27,7 +27,7 @@ export class Viewallhotelcomponent implements OnInit {
 
   loadHotels(): void {
     this.loading = true;
-    this.hotelService.getAllHotel().subscribe({
+    this.hotelService.getAllHotels().subscribe({
       next: (data: Hotel[]) => { // type safe
         this.hotels = data;
         this.loading = false;
@@ -44,7 +44,7 @@ export class Viewallhotelcomponent implements OnInit {
   // Delete method
   deleteHotels(id: number): void {
     if (confirm('Are you sure you want to delete this Hotel?')) {
-      this.hotelService.deleteHotels(id).subscribe({
+      this.hotelService.deleteHotel(id).subscribe({
         next: () => {
           alert('Hotel deleted successfully');
           this.loadHotels(); // refresh list

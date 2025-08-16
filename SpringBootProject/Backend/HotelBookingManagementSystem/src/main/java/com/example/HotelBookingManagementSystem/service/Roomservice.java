@@ -37,6 +37,7 @@ public class Roomservice {
     private String uploadDir;
 
 
+    // ✅ Get all rooms - now returns proper RoomDTO with HotelDTO
     public List<RoomDTO> getAllRooms() {
         List<Room> rooms = roomRepository.findAll();
 
@@ -49,7 +50,14 @@ public class Roomservice {
                         room.getAdults(),
                         room.getChildren(),
                         room.getPrice(),
-                        room.getHotel().getId() // hotelId
+                        new HotelDTO( // ✅ HotelDTO mapping
+                                room.getHotel().getId(),
+                                room.getHotel().getName(),
+                                room.getHotel().getAddress(),
+                                room.getHotel().getRating(),
+                                room.getHotel().getImage(),
+                                null // location er jonno pore lagle set kora jabe
+                        )
                 ))
                 .collect(Collectors.toList());
     }
@@ -59,7 +67,7 @@ public class Roomservice {
     }
 
 
-    public boolean deleteRoom(int id) {
+    public boolean deleteRoom(long id) {
         if (roomRepository.existsById(id)) {
             roomRepository.deleteById(id);
             return true;
@@ -81,13 +89,13 @@ public class Roomservice {
         room.setBookedRooms(0);
 
         // Fetch hotel by ID
-        Hotel hotel = hotelRepository.findById(dto.getHotelId())
-                .orElseThrow(() -> new EntityNotFoundException("Hotel not found with id: " + dto.getHotelId()));
+        Hotel hotel = hotelRepository.findById(dto.getHotelDTO().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Hotel not found with id: " + dto.getHotelDTO()));
 
 
         // Verify that the logged-in admin owns this hotel
         Integer hotelAdminId = hotel.getHotelAdmin() != null ? hotel.getHotelAdmin().getId() : null;
-        if (hotelAdminId == null || !hotelAdminId.equals(hotelAdmin.getId())) {
+        if (hotel.getHotelAdmin() == null || hotel.getHotelAdmin().getId() != hotelAdmin.getId()) {
             throw new RuntimeException("You are not authorized to add rooms for this hotel");
         }
 
@@ -105,13 +113,13 @@ public class Roomservice {
 
     // Roomservice.java - updateRoom method
 
-    public Room updateRoom(int id, RoomDTO dto, MultipartFile imageFile, HotelAdmin hotelAdmin) throws IOException {
+    public Room updateRoom(long id, RoomDTO dto, MultipartFile imageFile, HotelAdmin hotelAdmin) throws IOException {
         Room existingRoom = roomRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Room not found with id: " + id));
 
         // Fetch hotel by ID from DTO
-        Hotel hotel = hotelRepository.findById(dto.getHotelId())
-                .orElseThrow(() -> new EntityNotFoundException("Hotel not found with id: " + dto.getHotelId()));
+        Hotel hotel = hotelRepository.findById(dto.getHotelDTO().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Hotel not found with id: " + dto.getHotelDTO().getId()));
 
         // Verify that the logged-in admin owns this hotel
         Integer hotelAdminId = hotel.getHotelAdmin() != null ? hotel.getHotelAdmin().getId() : null;

@@ -8,5 +8,11 @@ export interface Room {
     price: number;
     availableRooms?: number;
     bookedRooms?: number;
-    hotel: { id: number };
+    hotel: {
+        id: number;
+        name?: string;
+        address?: string;
+        rating?: number;
+        image?: string;
+    };
 }

@@ -48,34 +48,33 @@ public class HotelRestController {
     }
 
 
-    @PostMapping("/save/")
+    // Save hotel
+    @PostMapping("/save")
     public ResponseEntity<?> saveHotel(
-            @RequestPart("hotel") HotelDTO hotelDTO,
+            @RequestPart("hotel") String hotelJson,
             @RequestPart(value = "image", required = false) MultipartFile image,
             Authentication authentication
     ) {
         try {
-            // Get logged-in admin from authentication
+            ObjectMapper mapper = new ObjectMapper();
+            HotelDTO hotelDTO = mapper.readValue(hotelJson, HotelDTO.class);
+
             String username = authentication.getName();
             HotelAdmin admin = hotelAdminRepository.findByUserEmail(username)
                     .orElseThrow(() -> new RuntimeException("Admin not found"));
 
-            // Save hotel with admin info using DTO
-            hotelService.saveHotel(hotelDTO, image, admin);
+            Hotel savedHotel = hotelService.saveHotel(hotelDTO, image, admin);
 
-            return ResponseEntity.ok(Map.of("Message", "Hotel saved successfully"));
+            return ResponseEntity.ok(Map.of("message", "Hotel saved successfully", "hotel", savedHotel));
 
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("Message", e.getMessage()));
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("Message", "Image upload failed", "Error", e.getMessage()));
         } catch (Exception e) {
+            e.printStackTrace(); // <-- console log
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("Message", "Hotel save failed", "Error", e.getMessage()));
+                    .body(Map.of("message", "Hotel save failed", "error", e.getMessage()));
         }
     }
+
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Hotel> findHotelById(@PathVariable int id) {
@@ -98,9 +97,12 @@ public class HotelRestController {
         return ResponseEntity.ok(hotels);
     }
 
-    @GetMapping("/searchByHotelAdminId")
-    public ResponseEntity<List<Hotel>> findHotelByHotelAdminId(@RequestParam(value = "hotelAdminId") String hotelAdminId) {
-        List<Hotel> hotels = hotelService.findHotelByAdminId(hotelAdminId);
+    @GetMapping("/myHotels")
+    public ResponseEntity<List<HotelDTO>> getMyHotels(Authentication authentication) {
+        String email = authentication.getName();
+        HotelAdmin admin = hotelAdminRepository.findByUserEmail(email)
+                .orElseThrow(() -> new RuntimeException("Admin not found"));
+        List<HotelDTO> hotels = hotelService.getHotelsByAdminId(admin.getId());
         return ResponseEntity.ok(hotels);
     }
 

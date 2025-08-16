@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/room")
@@ -46,8 +47,7 @@ public class RoomRestController {
                     .orElseThrow(() -> new RuntimeException("Admin not found"));
 
             roomService.saveRoom(roomDTO, image, admin);
-
-            return ResponseEntity.ok().body("Room saved successfully");
+            return ResponseEntity.ok(Map.of("message", "Room saved successfully"));
 
         } catch (EntityNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -62,10 +62,12 @@ public class RoomRestController {
         }
     }
 
+
+
     // Update existing room
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateRoom(
-            @PathVariable int id,
+            @PathVariable long id,
             @RequestPart("room") RoomDTO roomDTO,
             @RequestPart(value = "image", required = false) MultipartFile image,
             Authentication authentication
@@ -102,7 +104,7 @@ public class RoomRestController {
 
     // Delete room
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteRoom(@PathVariable int id) {
+    public ResponseEntity<?> deleteRoom(@PathVariable long id) {
         if (roomService.deleteRoom(id)) {
             return ResponseEntity.ok().body("Room deleted successfully");
         } else {

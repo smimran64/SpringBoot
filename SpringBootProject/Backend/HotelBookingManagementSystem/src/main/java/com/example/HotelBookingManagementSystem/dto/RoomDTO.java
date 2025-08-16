@@ -9,13 +9,13 @@ public class RoomDTO {
     private int adults;
     private int children;
     private Double price;
-    private int hotelId;
+    private HotelDTO hotelDTO;
 
 
     public RoomDTO() {
     }
 
-    public RoomDTO(Long id, String roomType, String image, int totalRooms, int adults, int children, Double price, int hotelId) {
+    public RoomDTO(Long id, String roomType, String image, int totalRooms, int adults, int children, Double price, HotelDTO hotelDTO) {
         this.id = id;
         this.roomType = roomType;
         this.image = image;
@@ -23,7 +23,7 @@ public class RoomDTO {
         this.adults = adults;
         this.children = children;
         this.price = price;
-        this.hotelId = hotelId;
+        this.hotelDTO = hotelDTO;
     }
 
     public Long getId() {
@@ -82,11 +82,11 @@ public class RoomDTO {
         this.price = price;
     }
 
-    public int getHotelId() {
-        return hotelId;
+    public HotelDTO getHotelDTO() {
+        return hotelDTO;
     }
 
-    public void setHotelId(int hotelId) {
-        this.hotelId = hotelId;
+    public void setHotelDTO(HotelDTO hotelDTO) {
+        this.hotelDTO = hotelDTO;
     }
 }
