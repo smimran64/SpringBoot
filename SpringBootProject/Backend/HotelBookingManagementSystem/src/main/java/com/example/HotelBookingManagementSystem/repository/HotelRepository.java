@@ -21,4 +21,5 @@ public interface HotelRepository extends JpaRepository<Hotel, Integer> {
 
     Optional<Hotel> findByName(String name);
 
+
 }

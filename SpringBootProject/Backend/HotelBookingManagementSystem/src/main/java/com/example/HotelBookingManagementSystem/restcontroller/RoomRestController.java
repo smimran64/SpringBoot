@@ -29,9 +29,50 @@ public class RoomRestController {
     private HotelAdminRepository hotelAdminRepository;
 
     // Get all rooms
+//    @GetMapping("/all")
+//    public List<RoomDTO> getAllRooms() {
+//        return roomService.getAllRooms();
+//    }
+
+
     @GetMapping("/all")
-    public List<RoomDTO> getAllRooms() {
-        return roomService.getAllRooms();
+    public List<RoomDTO> getAllRooms(Authentication authentication) {
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (isAdmin) {
+            return roomService.getAllRooms();
+        } else {
+            String email = authentication.getName();
+            HotelAdmin admin = hotelAdminRepository.findByUserEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Admin not found"));
+            return roomService.getRoomsForHotelAdmin(admin.getId());
+        }
+    }
+
+    @GetMapping("/hotel/{hotelId}")
+    public ResponseEntity<List<RoomDTO>> getRoomsByHotelId(
+            @PathVariable int hotelId,
+            Authentication authentication
+    ) {
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (isAdmin) {
+            return ResponseEntity.ok(roomService.getRoomsByHotelId(hotelId));
+        } else {
+            // hotelAdmin check
+            String email = authentication.getName();
+            HotelAdmin admin = hotelAdminRepository.findByUserEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Admin not found"));
+
+            RoomDTO[] rooms = roomService.getRoomsForHotelAdmin(admin.getId())
+                    .stream()
+                    .filter(r -> r.getHotelDTO().getId() == hotelId)
+                    .toArray(RoomDTO[]::new);
+
+            return ResponseEntity.ok(List.of(rooms));
+        }
     }
 
     // Save new room
@@ -61,8 +102,6 @@ public class RoomRestController {
                     .body("Room save failed: " + e.getMessage());
         }
     }
-
-
 
     // Update existing room
     @PutMapping("/update/{id}")

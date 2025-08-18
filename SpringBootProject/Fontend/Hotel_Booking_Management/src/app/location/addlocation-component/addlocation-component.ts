@@ -68,7 +68,7 @@ onFileSelected(event: any): void {
 
         next: res => {
           console.log('location added successfully', location);
-          this.router.navigate(['/']);
+          this.router.navigate(['/viewlocation']);
         },
 
         error: err => {

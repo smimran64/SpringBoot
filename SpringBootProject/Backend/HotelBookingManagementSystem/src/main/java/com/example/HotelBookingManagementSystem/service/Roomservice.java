@@ -50,21 +50,67 @@ public class Roomservice {
                         room.getAdults(),
                         room.getChildren(),
                         room.getPrice(),
-                        new HotelDTO( // ✅ HotelDTO mapping
+                        room.getAvailableRooms(),  // ✅ add availableRooms
+                        room.getBookedRooms(),     // ✅ add bookedRooms
+                        new HotelDTO(              // ✅ HotelDTO mapping
                                 room.getHotel().getId(),
                                 room.getHotel().getName(),
                                 room.getHotel().getAddress(),
                                 room.getHotel().getRating(),
                                 room.getHotel().getImage(),
-                                null // location er jonno pore lagle set kora jabe
+                                null // location pore lagle set kora jabe
                         )
                 ))
                 .collect(Collectors.toList());
     }
 
+
+    // HotelAdmin → শুধু নিজ hotel এর room
+    public List<RoomDTO> getRoomsForHotelAdmin(int hotelAdminId) {
+        List<Hotel> hotels = hotelRepository.findByHotelAdminId(hotelAdminId);
+        if (hotels.isEmpty()) {
+            throw new RuntimeException("No hotels found for this admin");
+        }
+
+        // ধরছি hotelAdmin সাধারণত 1 hotel এর জন্য থাকে
+        Hotel hotel = hotels.get(0);
+        List<Room> rooms = roomRepository.findByHotelId(hotel.getId());
+        return rooms.stream().map(this::mapToDTO).collect(Collectors.toList());
+    }
+
+    private RoomDTO mapToDTO(Room room) {
+        return new RoomDTO(
+                room.getId(),
+                room.getRoomType(),
+                room.getImage(),
+                room.getTotalRooms(),
+                room.getAdults(),
+                room.getChildren(),
+                room.getPrice(),
+                room.getAvailableRooms(),
+                room.getBookedRooms(),
+                new HotelDTO(
+                        room.getHotel().getId(),
+                        room.getHotel().getName(),
+                        room.getHotel().getAddress(),
+                        room.getHotel().getRating(),
+                        room.getHotel().getImage(),
+                        null // location optional
+                )
+        );
+    }
+
     public List<Room> findRoomByHotelName(String hotelName) {
         return roomRepository.findRoomByHotelName(hotelName);
     }
+
+    public List<RoomDTO> getRoomsByHotelId(int hotelId) {
+        List<Room> rooms = roomRepository.findByHotelId(hotelId);
+        return rooms.stream()
+                .map(this::mapToDTO) // convertToDTO এর জায়গায় mapToDTO ব্যবহার করো
+                .collect(Collectors.toList());
+    }
+
 
 
     public boolean deleteRoom(long id) {
@@ -74,7 +120,6 @@ public class Roomservice {
         }
         return false;
     }
-
 
 
     // Save Room
@@ -159,7 +204,7 @@ public class Roomservice {
             Files.createDirectories(uploadPath);
         }
 
-        String fileName = room.getRoomType()+ "_" + UUID.randomUUID();
+        String fileName = room.getRoomType() + "_" + UUID.randomUUID();
 
         Path filePath = uploadPath.resolve(fileName);
 

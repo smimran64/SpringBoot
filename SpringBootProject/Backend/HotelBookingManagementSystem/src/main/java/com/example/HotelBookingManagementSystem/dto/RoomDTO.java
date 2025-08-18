@@ -9,13 +9,15 @@ public class RoomDTO {
     private int adults;
     private int children;
     private Double price;
+    private int availableRooms;
+    private int bookedRooms;
     private HotelDTO hotelDTO;
 
 
     public RoomDTO() {
     }
 
-    public RoomDTO(Long id, String roomType, String image, int totalRooms, int adults, int children, Double price, HotelDTO hotelDTO) {
+    public RoomDTO(Long id, String roomType, String image, int totalRooms, int adults, int children, Double price, int availableRooms, int bookedRooms, HotelDTO hotelDTO) {
         this.id = id;
         this.roomType = roomType;
         this.image = image;
@@ -23,6 +25,8 @@ public class RoomDTO {
         this.adults = adults;
         this.children = children;
         this.price = price;
+        this.availableRooms = availableRooms;
+        this.bookedRooms = bookedRooms;
         this.hotelDTO = hotelDTO;
     }
 
@@ -80,6 +84,22 @@ public class RoomDTO {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public int getAvailableRooms() {
+        return availableRooms;
+    }
+
+    public void setAvailableRooms(int availableRooms) {
+        this.availableRooms = availableRooms;
+    }
+
+    public int getBookedRooms() {
+        return bookedRooms;
+    }
+
+    public void setBookedRooms(int bookedRooms) {
+        this.bookedRooms = bookedRooms;
     }
 
     public HotelDTO getHotelDTO() {

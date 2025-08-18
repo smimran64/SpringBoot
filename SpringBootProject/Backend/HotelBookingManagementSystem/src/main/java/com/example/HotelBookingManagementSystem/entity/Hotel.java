@@ -28,10 +28,15 @@ public class Hotel {
     private List<Room> rooms;
 
 
+    @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Booking> bookings;
+
+
+
     public Hotel() {
     }
 
-    public Hotel(int id, String name, String address, String rating, String image, Location location, HotelAdmin hotelAdmin, List<Room> rooms) {
+    public Hotel(int id, String name, String address, String rating, String image, Location location, HotelAdmin hotelAdmin, List<Room> rooms, List<Booking> bookings) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -40,6 +45,7 @@ public class Hotel {
         this.location = location;
         this.hotelAdmin = hotelAdmin;
         this.rooms = rooms;
+        this.bookings = bookings;
     }
 
     public int getId() {
@@ -104,5 +110,13 @@ public class Hotel {
 
     public void setRooms(List<Room> rooms) {
         this.rooms = rooms;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
     }
 }

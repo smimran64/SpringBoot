@@ -21,6 +21,8 @@ import { HotelAdminRegComponent } from './hotelAdmin/hotel-admin-reg-component/h
 import { ViewAllHotelAdmin } from './hotelAdmin/view-all-hotel-admin/view-all-hotel-admin';
 import { AddRoomComponent } from './Room/add-room-component/add-room-component';
 import { ViewRoomComponent } from './Room/view-room-component/view-room-component';
+import { AddbookingComponent } from './Booking/addbooking-component/addbooking-component';
+import { ViewBookingComponent } from './Booking/view-booking-component/view-booking-component';
 
 @NgModule({
   declarations: [
@@ -40,7 +42,9 @@ import { ViewRoomComponent } from './Room/view-room-component/view-room-componen
     HotelAdminRegComponent,
     ViewAllHotelAdmin,
     AddRoomComponent,
-    ViewRoomComponent
+    ViewRoomComponent,
+    AddbookingComponent,
+    ViewBookingComponent
   ],
   imports: [
     BrowserModule,

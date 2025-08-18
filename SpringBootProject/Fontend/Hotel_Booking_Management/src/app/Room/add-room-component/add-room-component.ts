@@ -58,9 +58,10 @@ export class AddRoomComponent implements OnInit {
     });
   }
 
-  onImageSelected(event: any): void {
-    const file = event.target.files[0];
-    if (file) this.selectedImage = file;
+    onFileSelected(event: any): void {
+    if (event.target.files && event.target.files.length > 0) {
+      this.selectedImage = event.target.files[0];
+    }
   }
 
   saveRoom(): void {
@@ -75,7 +76,7 @@ export class AddRoomComponent implements OnInit {
       adults: this.roomForm.value.adults,
       children: this.roomForm.value.children,
       price: this.roomForm.value.price,
-      hotel: { id: this.roomForm.value.hotelId }
+      hotelDTO: { id: this.roomForm.value.hotelId }
     };
 
     this.roomService.saveRoom(room, this.selectedImage).subscribe({
@@ -110,7 +111,7 @@ export class AddRoomComponent implements OnInit {
       adults: this.roomForm.value.adults,
       children: this.roomForm.value.children,
       price: this.roomForm.value.price,
-      hotel: {
+      hotelDTO: {
         id: this.roomForm.value.hotelId,
         name: '',      // optional
         address: '',   // optional

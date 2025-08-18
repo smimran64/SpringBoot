@@ -33,6 +33,7 @@ export class HotelService {
 
   // Get logged-in admin hotels
   getMyHotels(): Observable<Hotel[]> {
+    this.getToken();
     const headers = this.getAuthHeaders(); // আগে tumi getAuthHeaders method বানিয়েছো
     return this.http.get<Hotel[]>(`${this.baseUrl}/myHotels`, { headers });
   }

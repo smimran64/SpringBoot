@@ -44,9 +44,10 @@
     <!-- Image Upload -->
     <div class="form-group">
       <label>Room Image</label>
-      <input type="file" (change)="onImageSelected($event)" />
-    </div>
-
+      <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+            <div *ngIf="!selectedImage && roomForm.touched" class="text-danger">
+                Please select an image
+    </div>        </div>
     <!-- Error Message -->
     <div class="error-message" *ngIf="message">
       {{ message }}

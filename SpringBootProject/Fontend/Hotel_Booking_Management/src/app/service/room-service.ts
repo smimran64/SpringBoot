@@ -21,6 +21,8 @@ export class RoomService {
   ) { }
 
 
+  
+
   private getToken(): string {
     if (isPlatformBrowser(this.platformId)) {
       return localStorage.getItem('authToken') || '';
@@ -37,18 +39,21 @@ export class RoomService {
 
   // Get all rooms
   getAllRooms(): Observable<Room[]> {
-    return this.http.get<Room[]>(`${this.baseUrl}/all`).pipe(
+    return this.http.get<Room[]>(`${this.baseUrl}/all`, { headers: this.getAuthHeaders() }).pipe(
+      catchError(this.handleError)
+    );
+  }
+  // Get rooms by hotel ID
+  // -----------------------------
+  getRoomsByHotelId(hotelId: number): Observable<Room[]> {
+    return this.http.get<Room[]>(`${this.baseUrl}/hotel/${hotelId}`, { headers: this.getAuthHeaders() }).pipe(
       catchError(this.handleError)
     );
   }
 
-  getRoomsByHotelId(hotelId: number): Observable<Room[]> {
-    return this.http.get<Room[]>(`${this.baseUrl}/hotel/${hotelId}`);
-  }
-
   // Get rooms by hotel name
   getRoomsByHotelName(hotelName: string): Observable<Room[]> {
-    return this.http.get<Room[]>(`${this.baseUrl}/r/searchRoom?hotelName=${hotelName}`).pipe(
+    return this.http.get<Room[]>(`${this.baseUrl}/r/searchRoom?hotelName=${hotelName}`, { headers: this.getAuthHeaders() }).pipe(
       catchError(this.handleError)
     );
   }
@@ -57,7 +62,7 @@ export class RoomService {
     const formData = new FormData();
     formData.append('room', new Blob([JSON.stringify({
       ...room,
-      hotelDTO: { id: room.hotel.id }   // Backend expects hotelDTO.id
+      hotelDTO: { id: room.hotelDTO.id }   // Backend expects hotelDTO.id
     })], { type: 'application/json' }));
 
     if (imageFile) formData.append('image', imageFile);
@@ -75,8 +80,8 @@ export class RoomService {
 
 
   updateRoom(id: number, room: Room, imageFile?: File): Observable<any> {
-    if (room.hotel && room.hotel.id && typeof room.hotel.id === 'string') {
-      room.hotel.id = parseInt(room.hotel.id, 10);
+    if (room.hotelDTO && room.hotelDTO.id && typeof room.hotelDTO.id === 'string') {
+      room.hotelDTO.id = parseInt(room.hotelDTO.id, 10);
     }
 
     const formData = new FormData();

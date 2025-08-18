@@ -8,7 +8,7 @@ export interface Room {
     price: number;
     availableRooms?: number;
     bookedRooms?: number;
-    hotel: {
+   hotelDTO: {
         id: number;
         name?: string;
         address?: string;

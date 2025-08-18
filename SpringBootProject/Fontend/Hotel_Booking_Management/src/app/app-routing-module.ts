@@ -9,6 +9,7 @@ import { HotelAdminRegComponent } from './hotelAdmin/hotel-admin-reg-component/h
 import { AddhotelComponent } from './hotel/addhotel-component/addhotel-component';
 import { Viewallhotelcomponent } from './hotel/viewallhotelcomponent/viewallhotelcomponent';
 import { AddRoomComponent } from './Room/add-room-component/add-room-component';
+import { ViewRoomComponent } from './Room/view-room-component/view-room-component';
 
 const routes: Routes = [
   {path: 'addlocation', component: AddlocationComponent},
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path: 'addhotel', component: AddhotelComponent},
   {path: 'viewHotel', component: Viewallhotelcomponent},
   {path: 'addroom', component: AddRoomComponent},
+  {path: 'allroom', component: ViewRoomComponent},
   {path: 'customerReg', component: CustomerRegComponent},
   {path: 'hotelAdminReg', component: HotelAdminRegComponent},
   {path: '', component: Login},
