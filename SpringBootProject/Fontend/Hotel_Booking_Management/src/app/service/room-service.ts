@@ -30,10 +30,22 @@ export class RoomService {
     return '';
   }
 
-  private getAuthHeaders(): HttpHeaders {
-    const token = this.getToken();
+  // private getAuthHeaders(): HttpHeaders {
+  //   const token = this.getToken();
+  //   return new HttpHeaders({
+  //     'Authorization': `Bearer ${token}`
+  //   });
+  // }
+
+  getAuthHeaders(): HttpHeaders {
+    let token = '';
+
+    if (isPlatformBrowser(this.platformId)) {
+      token = localStorage.getItem('authToken') || '';
+    }
+
     return new HttpHeaders({
-      'Authorization': `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
     });
   }
 

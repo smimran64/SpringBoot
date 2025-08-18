@@ -34,7 +34,7 @@ export class ViewRoomComponent {
     this.hotelService.getMyHotels().subscribe({
       next: (data) => {
         this.hotels = data,
-        this.cdr.markForCheck();
+          this.cdr.markForCheck();
       },
       error: (err) => console.error('Hotel loading error', err)
     });
@@ -45,10 +45,10 @@ export class ViewRoomComponent {
     if (this.selectedHotelId) {
       this.roomService.getRoomsByHotelId(this.selectedHotelId).subscribe({
         next: (data) => {
-           this.rooms = data; this.loading = false; 
-           this.cdr.markForCheck();
-          
-          },
+          this.rooms = data; this.loading = false;
+          this.cdr.markForCheck();
+
+        },
         error: (err) => { this.errorMessage = 'Failed to load rooms'; this.loading = false; }
       });
     } else {
@@ -60,8 +60,11 @@ export class ViewRoomComponent {
   }
 
   onHotelChange() {
-    this.loadRooms();
-  }
+  this.selectedHotelId = Number(this.selectedHotelId); // ensure number
+  this.loadRooms();
+}
+
+
 
 
 

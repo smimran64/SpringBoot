@@ -82,7 +82,7 @@ export class AddRoomComponent implements OnInit {
     this.roomService.saveRoom(room, this.selectedImage).subscribe({
       next: () => {
         alert('Room saved successfully');
-        this.router.navigate(['/rooms']);
+        this.router.navigate(['/allroom']);
       },
       error: (err) => {
         console.error('Room save error:', err);

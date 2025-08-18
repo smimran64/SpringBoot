@@ -1,7 +1,7 @@
 <div class="container">
     <div>
         <label for="hotelFilter">Filter by Hotel:</label>
-        <select id="hotelFilter" [(ngModel)]="selectedHotelId" (change)="onHotelChange()">
+        <select id="hotelFilter" [(ngModel)]="selectedHotelId" (change)=" onHotelChange()">
             <option [ngValue]="undefined">All Hotels</option>
             <option *ngFor="let hotel of hotels" [ngValue]="hotel.id">{{ hotel.name }}</option>
         </select>
