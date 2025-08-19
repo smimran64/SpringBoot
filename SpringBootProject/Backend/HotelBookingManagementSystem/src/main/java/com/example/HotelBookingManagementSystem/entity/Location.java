@@ -10,7 +10,7 @@ public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private String name;
     private String image;
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -22,18 +22,18 @@ public class Location {
     public Location() {
     }
 
-    public Location(int id, String name, String image, List<Hotel> hotels) {
+    public Location(long id, String name, String image, List<Hotel> hotels) {
         this.id = id;
         this.name = name;
         this.image = image;
         this.hotels = hotels;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

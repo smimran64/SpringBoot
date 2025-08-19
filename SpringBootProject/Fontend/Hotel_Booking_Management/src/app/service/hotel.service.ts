@@ -98,4 +98,28 @@ export class HotelService {
     return throwError(() => new Error('Something bad happened; please try again later.'));
   }
 
+
+  // Search hotels by location and date
+  searchHotels(locationId: number, checkIn: string, checkOut: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/search`, {
+      params: {
+        locationId: locationId.toString(),
+        checkIn,
+        checkOut
+      }
+    }).pipe(catchError(this.handleError));
+  }
+
+  // Get hotel details by ID
+  // Fetch hotel details by ID
+  getHotelById(hotelId: number): Observable<Hotel> {
+    return this.http.get<Hotel>(`${this.baseUrl}/${hotelId}`, { headers: this.getAuthHeaders() })
+      .pipe(catchError(this.handleError));
+  }
+
+  // Fetch all rooms of a hotel
+  getRoomsByHotel(hotelId: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/${hotelId}/rooms`, { headers: this.getAuthHeaders() })
+      .pipe(catchError(this.handleError));
+  }
 }

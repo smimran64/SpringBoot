@@ -10,14 +10,18 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface HotelRepository extends JpaRepository<Hotel, Integer> {
+public interface HotelRepository extends JpaRepository<Hotel, Long> {
 
 
     @Query("select h from  Hotel h where h.location.name= :locationName")
     List<Hotel> findHotelByLocationName(@Param("locationName") String locationName);
 
+    @Query("SELECT h FROM Hotel h WHERE h.location.id = :locationId")
+    List<Hotel> findHotelsByLocationId(@Param("locationId") Long locationId);
 
-    List<Hotel> findByHotelAdminId(int hotelAdminId);
+
+
+    List<Hotel> findByHotelAdminId(Long hotelAdminId);
 
     Optional<Hotel> findByName(String name);
 

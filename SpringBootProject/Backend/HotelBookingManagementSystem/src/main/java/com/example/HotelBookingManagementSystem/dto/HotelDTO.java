@@ -2,7 +2,7 @@ package com.example.HotelBookingManagementSystem.dto;
 
 public class HotelDTO {
 
-    private int id;
+    private long id;
     private String name;
     private String address;
     private String rating;
@@ -12,20 +12,20 @@ public class HotelDTO {
 
     public HotelDTO() {}
 
-    public HotelDTO(int id, String name, String address, String rating, String image, LocationDTO locationdto) {
+    public HotelDTO(long id, String name, String address, String rating, String image, LocationDTO location) {
         this.id = id;
         this.name = name;
         this.address = address;
         this.rating = rating;
         this.image = image;
-        this.location = locationdto;
+        this.location = location;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -65,7 +65,7 @@ public class HotelDTO {
         return location;
     }
 
-    public void setLocation(LocationDTO locationdto) {
-        this.location= locationdto;
+    public void setLocation(LocationDTO location) {
+        this.location = location;
     }
 }

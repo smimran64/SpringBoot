@@ -21,8 +21,12 @@ import { HotelAdminRegComponent } from './hotelAdmin/hotel-admin-reg-component/h
 import { ViewAllHotelAdmin } from './hotelAdmin/view-all-hotel-admin/view-all-hotel-admin';
 import { AddRoomComponent } from './Room/add-room-component/add-room-component';
 import { ViewRoomComponent } from './Room/view-room-component/view-room-component';
-import { AddbookingComponent } from './Booking/addbooking-component/addbooking-component';
-import { ViewBookingComponent } from './Booking/view-booking-component/view-booking-component';
+import { AdminRegComponent } from './Admin/admin-reg-component/admin-reg-component';
+import { AdminProfileComponent } from './Admin/admin-profile-component/admin-profile-component';
+import { HotelAdminProfile } from './hotelAdmin/hotel-admin-profile/hotel-admin-profile';
+import { CustomerProfileComponent } from './customer/customer-profile-component/customer-profile-component';
+import { HomeComponenent } from './home/home-componenent/home-componenent';
+import { HotelDetailsCompononent } from './hotel/hotel-details-compononent/hotel-details-compononent';
 
 @NgModule({
   declarations: [
@@ -43,8 +47,12 @@ import { ViewBookingComponent } from './Booking/view-booking-component/view-book
     ViewAllHotelAdmin,
     AddRoomComponent,
     ViewRoomComponent,
-    AddbookingComponent,
-    ViewBookingComponent
+    AdminRegComponent,
+    AdminProfileComponent,
+    HotelAdminProfile,
+    CustomerProfileComponent,
+    HomeComponenent,
+    HotelDetailsCompononent
   ],
   imports: [
     BrowserModule,

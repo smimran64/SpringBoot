@@ -21,7 +21,7 @@ public class HotelAminService {
         return hotelAdminRepository.findAll();
     }
 
-    public Optional<HotelAdmin> getHotelAdminById(Integer id) {
+    public Optional<HotelAdmin> getHotelAdminById(long id) {
         return hotelAdminRepository.findById(id);
     }
 
@@ -30,11 +30,11 @@ public class HotelAminService {
         return hotelAdminRepository.save(hotelAdmin);
     }
 
-    public void deleteHotelAdmin(Integer id) {
+    public void deleteHotelAdmin(long id) {
         hotelAdminRepository.deleteById(id);
     }
 
-    public HotelAdmin getProfileByUserId(Integer userId) {
+    public HotelAdmin getProfileByUserId(long userId) {
         return hotelAdminRepository.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("HotelAdmin not found"));
     }

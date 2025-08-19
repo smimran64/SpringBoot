@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface HotelAdminRepository extends JpaRepository<HotelAdmin, Integer> {
+public interface HotelAdminRepository extends JpaRepository<HotelAdmin, Long> {
 
-    Optional<HotelAdmin> findByUserId(Integer id);
+    Optional<HotelAdmin> findByUserId(Long id);
 
 
 

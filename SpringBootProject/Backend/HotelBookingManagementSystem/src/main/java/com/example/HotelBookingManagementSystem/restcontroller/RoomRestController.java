@@ -46,13 +46,16 @@ public class RoomRestController {
             String email = authentication.getName();
             HotelAdmin admin = hotelAdminRepository.findByUserEmail(email)
                     .orElseThrow(() -> new RuntimeException("Admin not found"));
+
+            // শুধুমাত্র তাদের hotel এর room
             return roomService.getRoomsForHotelAdmin(admin.getId());
         }
     }
 
+
     @GetMapping("/hotel/{hotelId}")
     public ResponseEntity<List<RoomDTO>> getRoomsByHotelId(
-            @PathVariable int hotelId,
+            @PathVariable long hotelId,
             Authentication authentication
     ) {
         boolean isAdmin = authentication.getAuthorities().stream()
@@ -66,12 +69,12 @@ public class RoomRestController {
             HotelAdmin admin = hotelAdminRepository.findByUserEmail(email)
                     .orElseThrow(() -> new RuntimeException("Admin not found"));
 
-            RoomDTO[] rooms = roomService.getRoomsForHotelAdmin(admin.getId())
+            List<RoomDTO> rooms = roomService.getRoomsForHotelAdmin(admin.getId())
                     .stream()
                     .filter(r -> r.getHotelDTO().getId() == hotelId)
-                    .toArray(RoomDTO[]::new);
+                    .toList();
 
-            return ResponseEntity.ok(List.of(rooms));
+            return ResponseEntity.ok(rooms);
         }
     }
 

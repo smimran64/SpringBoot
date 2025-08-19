@@ -10,6 +10,12 @@ import { AddhotelComponent } from './hotel/addhotel-component/addhotel-component
 import { Viewallhotelcomponent } from './hotel/viewallhotelcomponent/viewallhotelcomponent';
 import { AddRoomComponent } from './Room/add-room-component/add-room-component';
 import { ViewRoomComponent } from './Room/view-room-component/view-room-component';
+import { AdminRegComponent } from './Admin/admin-reg-component/admin-reg-component';
+import { AdminProfileComponent } from './Admin/admin-profile-component/admin-profile-component';
+import { HotelAdminProfile } from './hotelAdmin/hotel-admin-profile/hotel-admin-profile';
+import { CustomerProfileComponent } from './customer/customer-profile-component/customer-profile-component';
+import { HomeComponenent } from './home/home-componenent/home-componenent';
+import { HotelDetailsCompononent } from './hotel/hotel-details-compononent/hotel-details-compononent';
 
 const routes: Routes = [
   {path: 'addlocation', component: AddlocationComponent},
@@ -21,6 +27,12 @@ const routes: Routes = [
   {path: 'allroom', component: ViewRoomComponent},
   {path: 'customerReg', component: CustomerRegComponent},
   {path: 'hotelAdminReg', component: HotelAdminRegComponent},
+  {path: 'adminReg', component: AdminRegComponent},
+  {path: 'adminProfile', component: AdminProfileComponent},
+  {path: 'hoteladminProfile', component: HotelAdminProfile},
+  {path: 'customerProfile', component: CustomerProfileComponent},
+  {path: 'home', component: HomeComponenent},
+  {path: 'hotel-details/:id', component: HotelDetailsCompononent},
   {path: '', component: Login},
 
 ];

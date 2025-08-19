@@ -14,7 +14,7 @@ public class HotelAdmin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private String name;
 
     @Column(unique = true, nullable = false)
@@ -35,7 +35,7 @@ public class HotelAdmin {
     public HotelAdmin() {
     }
 
-    public HotelAdmin(int id, String name, String email, String phone, String address, String gender, Date dateOfBirth, String image, User user, List<Hotel> hotels) {
+    public HotelAdmin(long id, String name, String email, String phone, String address, String gender, Date dateOfBirth, String image, User user, List<Hotel> hotels) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -48,11 +48,11 @@ public class HotelAdmin {
         this.hotels = hotels;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

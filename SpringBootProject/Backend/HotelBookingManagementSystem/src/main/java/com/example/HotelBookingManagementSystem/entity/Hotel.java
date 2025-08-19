@@ -1,5 +1,6 @@
 package com.example.HotelBookingManagementSystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public class Hotel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private long id;
     private String name;
     private String address;
     private String rating;
@@ -25,10 +26,11 @@ public class Hotel {
     private HotelAdmin hotelAdmin;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "hotel-rooms")
     private List<Room> rooms;
 
-
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "hotel-bookings")
     private List<Booking> bookings;
 
 
@@ -36,7 +38,7 @@ public class Hotel {
     public Hotel() {
     }
 
-    public Hotel(int id, String name, String address, String rating, String image, Location location, HotelAdmin hotelAdmin, List<Room> rooms, List<Booking> bookings) {
+    public Hotel(long id, String name, String address, String rating, String image, Location location, HotelAdmin hotelAdmin, List<Room> rooms, List<Booking> bookings) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -48,11 +50,11 @@ public class Hotel {
         this.bookings = bookings;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -28,19 +28,31 @@ export class Login implements OnInit {
     });
   }
 
-  onSubmit(): void {
-  if (this.loginForm.invalid) {
-    return;
-  }
+onSubmit(): void {
+  if (this.loginForm.invalid) return;
 
   const { email, password } = this.loginForm.value;
 
   this.authService.login(email, password).subscribe({
     next: (response) => {
       if (response.token) {
+        // token এবং role localStorage-এ already save হচ্ছে authService.login() থেকে
+        const role = this.authService.getUserRole(); 
+
         this.successMessage = 'Login successful!';
         this.errorMessage = null;
-        this.router.navigate(['/addhotel']);
+
+        // Role-based redirect
+        if (role === 'CUSTOMER') {
+          this.router.navigate(['/customerProfile']);
+        } else if (role === 'HOTEL_ADMIN') {
+          this.router.navigate(['/hoteladminProfile']);
+        } else if (role === 'ADMIN') {
+          this.router.navigate(['/adminProfile']);
+        } else {
+          this.router.navigate(['/']); // fallback
+        }
+
       } else {
         this.errorMessage = response.message || 'Login failed.';
         this.successMessage = null;
@@ -52,6 +64,5 @@ export class Login implements OnInit {
     }
   });
 }
-
 
 }

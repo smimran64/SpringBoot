@@ -42,6 +42,9 @@ public class AuthService {
     private HotelAminService hotelAminService;
 
     @Autowired
+    private AdminService adminService;
+
+    @Autowired
     @Lazy
     private AuthenticationManager authenticationManager;
 
@@ -279,6 +282,65 @@ public class AuthService {
 
 
 
+
+                                        // Super Admin Part start
+
+    public String saveImageForAdmin(MultipartFile file, Admin admin) {
+
+        Path uploadPath = Paths.get(uploadDir + "/Admins");
+        if (!Files.exists(uploadPath)) {
+            try {
+                Files.createDirectory(uploadPath);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        String AdminName = admin.getName();
+        String fileName = AdminName.trim().replaceAll("\\s+", "_");
+
+        String savedFileName = fileName + "_" + UUID.randomUUID().toString();
+
+        try {
+            Path filePath = uploadPath.resolve(savedFileName);
+            Files.copy(file.getInputStream(), filePath);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return savedFileName;
+
+    }
+
+
+    public void registerAdmin(User user, MultipartFile imageFile, Admin adminData) throws IOException {
+        if (imageFile != null && !imageFile.isEmpty()) {
+            // Save image for both User and HotelAdmin
+            String filename = saveImage(imageFile, user);
+            String adminImage = saveImageForAdmin(imageFile, adminData);
+            adminData.setImage(adminImage);
+            user.setImage(filename);
+        }
+
+        // Encode password before saving User
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(Role.ADMIN);
+        user.setActive(false);
+
+        // Save User FIRST and get persisted instance
+        User savedUser = userRepository.save(user);
+
+        // Now, associate saved User with JobSeeker and save JobSeeker
+        adminData.setUser(savedUser);
+        adminService.saveAdmin(adminData);
+
+        // Now generate token and save Token associated with savedUser
+        String jwt = jwtService.generateToken(savedUser);
+        saveUserToken(jwt, savedUser);
+
+        // Send Activation Email
+        sendActivationEmail(savedUser);
+    }
 
 
 

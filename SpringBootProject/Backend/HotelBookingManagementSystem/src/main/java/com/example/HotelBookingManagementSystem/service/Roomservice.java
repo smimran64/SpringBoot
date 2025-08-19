@@ -66,7 +66,7 @@ public class Roomservice {
 
 
     // HotelAdmin → শুধু নিজ hotel এর room
-    public List<RoomDTO> getRoomsForHotelAdmin(int hotelAdminId) {
+    public List<RoomDTO> getRoomsForHotelAdmin(long hotelAdminId) {
         List<Hotel> hotels = hotelRepository.findByHotelAdminId(hotelAdminId);
         if (hotels.isEmpty()) {
             throw new RuntimeException("No hotels found for this admin");
@@ -104,7 +104,7 @@ public class Roomservice {
         return roomRepository.findRoomByHotelName(hotelName);
     }
 
-    public List<RoomDTO> getRoomsByHotelId(int hotelId) {
+    public List<RoomDTO> getRoomsByHotelId(long hotelId) {
         List<Room> rooms = roomRepository.findByHotelId(hotelId);
         return rooms.stream()
                 .map(this::mapToDTO) // convertToDTO এর জায়গায় mapToDTO ব্যবহার করো
@@ -139,7 +139,7 @@ public class Roomservice {
 
 
         // Verify that the logged-in admin owns this hotel
-        Integer hotelAdminId = hotel.getHotelAdmin() != null ? hotel.getHotelAdmin().getId() : null;
+        Long hotelAdminId = hotel.getHotelAdmin() != null ? hotel.getHotelAdmin().getId() : null;
         if (hotel.getHotelAdmin() == null || hotel.getHotelAdmin().getId() != hotelAdmin.getId()) {
             throw new RuntimeException("You are not authorized to add rooms for this hotel");
         }
@@ -167,7 +167,7 @@ public class Roomservice {
                 .orElseThrow(() -> new EntityNotFoundException("Hotel not found with id: " + dto.getHotelDTO().getId()));
 
         // Verify that the logged-in admin owns this hotel
-        Integer hotelAdminId = hotel.getHotelAdmin() != null ? hotel.getHotelAdmin().getId() : null;
+        Long hotelAdminId = hotel.getHotelAdmin() != null ? hotel.getHotelAdmin().getId() : null;
         if (hotelAdminId == null || !hotelAdminId.equals(hotelAdmin.getId())) {
             throw new RuntimeException("You are not authorized to update rooms for this hotel");
         }

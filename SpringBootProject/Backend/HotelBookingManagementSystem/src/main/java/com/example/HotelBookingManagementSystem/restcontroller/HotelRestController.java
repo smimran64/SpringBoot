@@ -4,6 +4,7 @@ import com.example.HotelBookingManagementSystem.dto.HotelDTO;
 import com.example.HotelBookingManagementSystem.entity.Hotel;
 import com.example.HotelBookingManagementSystem.entity.HotelAdmin;
 import com.example.HotelBookingManagementSystem.entity.Location;
+import com.example.HotelBookingManagementSystem.entity.Room;
 import com.example.HotelBookingManagementSystem.repository.HotelAdminRepository;
 import com.example.HotelBookingManagementSystem.repository.HotelRepository;
 import com.example.HotelBookingManagementSystem.repository.LocationRepository;
@@ -95,6 +96,24 @@ public class HotelRestController {
 
         List<Hotel> hotels = hotelService.findHotelByLocationName(locationName);
         return ResponseEntity.ok(hotels);
+    }
+
+    // for home page hotel search
+
+
+    @GetMapping("/search")
+    public ResponseEntity<List<HotelDTO>> searchHotels(
+            @RequestParam Long locationId,
+            @RequestParam String checkIn,
+            @RequestParam String checkOut) {
+        List<HotelDTO> hotels = hotelService.searchHotels(locationId, checkIn, checkOut);
+        return ResponseEntity.ok(hotels);
+    }
+
+    @GetMapping("/{id}/rooms")
+    public ResponseEntity<List<Room>> getRoomsByHotel(@PathVariable Long id) {
+        List<Room> rooms = hotelService.getRoomsByHotelId(id);
+        return ResponseEntity.ok(rooms);
     }
 
     @GetMapping("/myHotels")

@@ -6,6 +6,7 @@ import com.example.HotelBookingManagementSystem.dto.LocationDTO;
 import com.example.HotelBookingManagementSystem.entity.Hotel;
 import com.example.HotelBookingManagementSystem.entity.HotelAdmin;
 import com.example.HotelBookingManagementSystem.entity.Location;
+import com.example.HotelBookingManagementSystem.entity.Room;
 import com.example.HotelBookingManagementSystem.repository.HotelAdminRepository;
 import com.example.HotelBookingManagementSystem.repository.HotelRepository;
 import com.example.HotelBookingManagementSystem.repository.LocationRepository;
@@ -97,7 +98,7 @@ public class HotelService {
 
 
 
-    public Hotel findHotelById(int id) {
+    public Hotel findHotelById(long id) {
 
         return hotelRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Hotel with id: " + id + " not found!"));
@@ -115,7 +116,39 @@ public class HotelService {
         return hotelRepository.findHotelByLocationName(locationName);
     }
 
-    public List<HotelDTO> getHotelsByAdminId(int hotelAdminId) {
+
+
+    public List<HotelDTO> searchHotels(Long locationId, String checkIn, String checkOut) {
+        List<Hotel> hotels = hotelRepository.findHotelsByLocationId(locationId);
+
+        // এখানে চাইলে checkIn / checkOut দিয়ে room availability ফিল্টার করতে পারবে।
+        return hotels.stream().map(hotel -> {
+            LocationDTO locationDTO = null;
+            if (hotel.getLocation() != null) {
+                locationDTO = new LocationDTO(
+                        hotel.getLocation().getId(),
+                        hotel.getLocation().getName(),
+                        hotel.getLocation().getImage()
+                );
+            }
+            return new HotelDTO(
+                    hotel.getId(),
+                    hotel.getName(),
+                    hotel.getAddress(),
+                    hotel.getRating(),
+                    hotel.getImage(),
+                    locationDTO
+            );
+        }).collect(Collectors.toList());
+    }
+
+    public List<Room> getRoomsByHotelId(Long hotelId) {
+        Hotel hotel = hotelRepository.findById(hotelId)
+                .orElseThrow(() -> new EntityNotFoundException("Hotel with id " + hotelId + " not found!"));
+        return hotel.getRooms();  // Hotel entity তে rooms mapped আছে
+    }
+
+    public List<HotelDTO> getHotelsByAdminId(long hotelAdminId) {
         List<Hotel> hotels = hotelRepository.findByHotelAdminId(hotelAdminId);
         return hotels.stream().map(hotel -> new HotelDTO(
                 hotel.getId(),
@@ -128,7 +161,7 @@ public class HotelService {
     }
 
 
-    public Hotel updateHotel(int id, Hotel updatehotel, MultipartFile imageFile) throws IOException {
+    public Hotel updateHotel(long id, Hotel updatehotel, MultipartFile imageFile) throws IOException {
         Hotel existingHotel = hotelRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Hotel with id: " + id + " not found!"));
 
@@ -161,7 +194,7 @@ public class HotelService {
         return hotelRepository.save(existingHotel);
     }
 
-    public boolean deleteHotel(int id) {
+    public boolean deleteHotel(long id) {
         if (hotelRepository.existsById(id)) {
             hotelRepository.deleteById(id);
             return true;

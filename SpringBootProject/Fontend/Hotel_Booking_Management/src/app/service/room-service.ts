@@ -21,7 +21,7 @@ export class RoomService {
   ) { }
 
 
-  
+
 
   private getToken(): string {
     if (isPlatformBrowser(this.platformId)) {
@@ -30,22 +30,10 @@ export class RoomService {
     return '';
   }
 
-  // private getAuthHeaders(): HttpHeaders {
-  //   const token = this.getToken();
-  //   return new HttpHeaders({
-  //     'Authorization': `Bearer ${token}`
-  //   });
-  // }
-
-  getAuthHeaders(): HttpHeaders {
-    let token = '';
-
-    if (isPlatformBrowser(this.platformId)) {
-      token = localStorage.getItem('authToken') || '';
-    }
-
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
     return new HttpHeaders({
-      Authorization: `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`
     });
   }
 
@@ -65,10 +53,11 @@ export class RoomService {
 
   // Get rooms by hotel name
   getRoomsByHotelName(hotelName: string): Observable<Room[]> {
-    return this.http.get<Room[]>(`${this.baseUrl}/r/searchRoom?hotelName=${hotelName}`, { headers: this.getAuthHeaders() }).pipe(
+    return this.http.get<Room[]>(`${this.baseUrl}/searchRoom?hotelName=${hotelName}`, { headers: this.getAuthHeaders() }).pipe(
       catchError(this.handleError)
     );
   }
+
 
   saveRoom(room: Room, imageFile?: File): Observable<any> {
     const formData = new FormData();
@@ -113,10 +102,14 @@ export class RoomService {
 
   // Delete room
   deleteRoom(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/delete/${id}`, { responseType: 'text' }).pipe(
+    return this.http.delete(`${this.baseUrl}/delete/${id}`, {
+      headers: this.getAuthHeaders(),
+      responseType: 'text'
+    }).pipe(
       catchError(this.handleError)
     );
   }
+
 
   private handleError(error: any) {
     console.error('RoomService Error:', error);

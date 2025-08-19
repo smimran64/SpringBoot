@@ -2,14 +2,14 @@ package com.example.HotelBookingManagementSystem.dto;
 
 public class LocationDTO {
 
-    private int id;
+    private long id;
     private String name;
     private String image;
 
     public LocationDTO() {
     }
 
-    public LocationDTO(int id, String name, String image) {
+    public LocationDTO(long id, String name, String image) {
         this.id = id;
         this.name = name;
         this.image = image;
@@ -17,11 +17,11 @@ public class LocationDTO {
 
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -48,14 +48,14 @@ public class LocationService {
         locationRepository.save(location);
     }
 
-    public Location getLocationById(int id) {
+    public Location getLocationById(long id) {
 
         return locationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Location with id: " + id + " not found!"));
 
     }
 
-    public boolean deleteLocation(int id) {
+    public boolean deleteLocation(long id) {
         if (locationRepository.existsById(id)) {
             locationRepository.deleteById(id);
             return true;
@@ -64,7 +64,7 @@ public class LocationService {
     }
 
 
-    public Location updateLocation(int id, Location updateLocation, MultipartFile imageFile) throws IOException {
+    public Location updateLocation(long id, Location updateLocation, MultipartFile imageFile) throws IOException {
 
         Location existingLocation = locationRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Location with id: " + id + " not found!"));
