@@ -12,6 +12,8 @@ export class HotelService {
 
   baseUrl: string = environments.apiUrl + '/api/hotel';
 
+  
+
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object
@@ -34,7 +36,7 @@ export class HotelService {
   // Get logged-in admin hotels
   getMyHotels(): Observable<Hotel[]> {
     this.getToken();
-    const headers = this.getAuthHeaders(); // আগে tumi getAuthHeaders method বানিয়েছো
+    const headers = this.getAuthHeaders(); 
     return this.http.get<Hotel[]>(`${this.baseUrl}/myHotels`, { headers });
   }
 
@@ -44,12 +46,7 @@ export class HotelService {
     return this.http.get<any[]>(`${this.baseUrl}/all`).pipe(
       catchError(this.handleError)
     );
-  }
-
-  // private handleError(error: any) {
-  //   console.error('HotelService Error:', error);
-  //   return throwError(() => error);
-  // }
+  } 
 
   // Save hotel with optional image
   saveHotel(hotel: Hotel, imageFile?: File): Observable<any> {
@@ -111,15 +108,15 @@ export class HotelService {
   }
 
   // Get hotel details by ID
-  // Fetch hotel details by ID
+  
   getHotelById(hotelId: number): Observable<Hotel> {
     return this.http.get<Hotel>(`${this.baseUrl}/${hotelId}`, { headers: this.getAuthHeaders() })
       .pipe(catchError(this.handleError));
   }
 
   // Fetch all rooms of a hotel
-  getRoomsByHotel(hotelId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.baseUrl}/${hotelId}/rooms`, { headers: this.getAuthHeaders() })
-      .pipe(catchError(this.handleError));
-  }
+  // getRoomsByHotel(hotelId:number): Observable<any[]> {
+  //   return this.http.get<any[]>(`${this.baseUrl}/r/searchroombyid?hotelid=${hotelId}`, { headers: this.getAuthHeaders() })
+  //     .pipe(catchError(this.handleError));
+  // }
 }

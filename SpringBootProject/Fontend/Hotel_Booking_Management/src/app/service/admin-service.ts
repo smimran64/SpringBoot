@@ -12,7 +12,7 @@ import { isPlatformBrowser } from '@angular/common';
 export class AdminService {
 
 
-  private baseUrl = environments.apiUrl + '/api/admin';
+  private baseUrl = environments.apiUrl + '/api/admin/reg';
 
 
   constructor(

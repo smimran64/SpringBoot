@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/images/**","/api/customer/**","/api/customer/","/api/hotelAdmin/**","/api/hotel/all","/api/login","/api/room/all"
                                 ,"/api/active/**","/api/user/active/**","/api/location/save","/api/location/all","/api/hotel/searchByHotelAdminId","/api/admin/reg",
                                 "/api/location/delete/**", "/api/hoteladmin/reg", "/api/hoteladmin/profile","/api/customer/profile","/api/admin/profile","/api/hotel/search","/api/hotel/{id}/rooms",
-                                "/api/hotel/{id}").permitAll()
+                                "/api/hotel/{id}","/api/room/r/**").permitAll()
                         .requestMatchers("/api/hotel/save","/api/room/save","/api/hotel/myHotels","/api/room/hotel/{hotelId}").hasRole("HOTEL_ADMIN")
 
                         .anyRequest().authenticated()

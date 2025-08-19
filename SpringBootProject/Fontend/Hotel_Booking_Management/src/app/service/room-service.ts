@@ -51,14 +51,6 @@ export class RoomService {
     );
   }
 
-  // Get rooms by hotel name
-  getRoomsByHotelName(hotelName: string): Observable<Room[]> {
-    return this.http.get<Room[]>(`${this.baseUrl}/searchRoom?hotelName=${hotelName}`, { headers: this.getAuthHeaders() }).pipe(
-      catchError(this.handleError)
-    );
-  }
-
-
   saveRoom(room: Room, imageFile?: File): Observable<any> {
     const formData = new FormData();
     formData.append('room', new Blob([JSON.stringify({

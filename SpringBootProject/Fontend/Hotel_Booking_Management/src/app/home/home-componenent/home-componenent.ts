@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { LocationService } from '../../service/location.service';
 import { HotelService } from '../../service/hotel.service';
 import { Router } from '@angular/router';
 import { environments } from '../../../environments/environments';
+import { RoomService } from '../../service/room-service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home-componenent',
@@ -13,20 +15,28 @@ import { environments } from '../../../environments/environments';
 })
 export class HomeComponenent {
 
+  private baseUrl = environments.apiUrl + '/api/hotel'
+
   searchForm!: FormGroup;
   locations: any[] = [];
   hotels: any[] = [];
   searched: boolean = false;
+  selectedHotel: any;
+
 
   constructor(
     private fb: FormBuilder,
     private locationService: LocationService,
     private hotelService: HotelService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+    private roomService: RoomService
   ) { }
 
   ngOnInit(): void {
     // form initialize
+
+    this.loadHotels();
     this.searchForm = this.fb.group({
       locationId: [''],
       checkIn: [''],
@@ -36,7 +46,8 @@ export class HomeComponenent {
     // load all locations
     this.locationService.getAllLocations().subscribe(data => {
       this.locations = data;
-    });
+      this.cdr.markForCheck();
+    });    
   }
 
   // search hotels
@@ -45,30 +56,57 @@ export class HomeComponenent {
     this.hotelService.searchHotels(locationId, checkIn, checkOut).subscribe(data => {
       this.hotels = data;
       this.searched = true;
+      this.cdr.markForCheck();
     });
   }
 
-  // navigate to hotel details
   viewHotel(hotelId: number) {
-    this.router.navigate(['/hotel-details', hotelId]);
+    this.roomService.getRoomsByHotelId(hotelId).subscribe({
+      next: (hotelData) => {
+        this.selectedHotel = hotelData;
+        this.router.navigate(['/hotel-details', hotelId]);
+      },
+      error: (err) => {
+        console.error('Failed to fetch hotel details', err);
+        // Optionally show an error message
+      }
+    });
   }
 
 
-  placeholder = 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1600&auto=format&fit=crop'; // বা লোকাল প্লেসহোল্ডার
+  placeholder = 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1600&auto=format&fit=crop';
 
-getHotelImage(h: any): string {
-  // h.image যদি শুধু fileName হয়:
-  if (h?.image) {
-    // উদাহরণ: http://localhost:8082/images/hotels/ + fileName
-    return `${environments.apiUrl}/images/hotels/${h.image}`;
+  getHotelImage(h: any): string {
+
+    if (h?.image) {
+
+      return `${environments.apiUrl}/images/hotels/${h.image}`;
+    }
+    return this.placeholder;
   }
-  return this.placeholder;
-}
 
-imgFallback(ev: Event) {
-  const target = ev.target as HTMLImageElement;
-  target.src = this.placeholder;
-}
+  imgFallback(ev: Event) {
+    const target = ev.target as HTMLImageElement;
+    target.src = this.placeholder;
+  }
 
-trackById = (_: number, item: any) => item.id;
+  trackById = (_: number, item: any) => item.id;
+
+  loadHotels():void{
+
+    this.hotelService.getAllHotels().subscribe({
+
+      next:(data)=>{
+        this.hotels = data;
+        console.log(data);
+        this.cdr.markForCheck();
+      },
+
+      error:(err)=>{
+
+        console.log('Hotel Loading Error',err);
+      }
+
+    });
+  }
 }

@@ -3,6 +3,7 @@ import { Hotel } from '../../model/hotel.model';
 import { Room } from '../../model/room.model';
 import { ActivatedRoute } from '@angular/router';
 import { HotelService } from '../../service/hotel.service';
+import { RoomService } from '../../service/room-service';
 
 @Component({
   selector: 'app-hotel-details-compononent',
@@ -19,7 +20,8 @@ export class HotelDetailsCompononent implements OnInit {
 
   constructor(
     private hotelService: HotelService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private roomService: RoomService
   ) { }
 
   ngOnInit(): void {
@@ -46,7 +48,7 @@ export class HotelDetailsCompononent implements OnInit {
   }
 
   loadRooms(hotelId: number) {
-    this.hotelService.getRoomsByHotel(hotelId).subscribe({
+    this.roomService.getRoomsByHotelId(hotelId).subscribe({
       next: (data) => {
         this.rooms = data;
       },

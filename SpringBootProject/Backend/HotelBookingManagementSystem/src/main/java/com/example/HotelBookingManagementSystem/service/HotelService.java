@@ -97,11 +97,33 @@ public class HotelService {
     }
 
 
+//
+//    public Hotel findHotelById(long id) {
+//
+//        return hotelRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException("Hotel with id: " + id + " not found!"));
+//    }
 
-    public Hotel findHotelById(long id) {
 
-        return hotelRepository.findById(id)
+    public HotelDTO getHotelById(long id) {
+        Hotel hotel = hotelRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Hotel with id: " + id + " not found!"));
+
+        HotelDTO dto = new HotelDTO();
+        dto.setId(hotel.getId());
+        dto.setName(hotel.getName());
+        dto.setAddress(hotel.getAddress());
+        dto.setRating(hotel.getRating());
+        dto.setImage(hotel.getImage());
+        Location location = hotel.getLocation(); // Assuming Hotel has getLocation()
+        if (location != null) {
+            LocationDTO locationDTO = new LocationDTO();
+            locationDTO.setName(location.getName());
+
+            dto.setLocation(locationDTO);
+        }
+
+        return dto;
     }
 
 
@@ -142,11 +164,11 @@ public class HotelService {
         }).collect(Collectors.toList());
     }
 
-    public List<Room> getRoomsByHotelId(Long hotelId) {
-        Hotel hotel = hotelRepository.findById(hotelId)
-                .orElseThrow(() -> new EntityNotFoundException("Hotel with id " + hotelId + " not found!"));
-        return hotel.getRooms();  // Hotel entity তে rooms mapped আছে
-    }
+//    public List<Room> getRoomsByHotelId(Long hotelId) {
+//        Hotel hotel = hotelRepository.findById(hotelId)
+//                .orElseThrow(() -> new EntityNotFoundException("Hotel with id " + hotelId + " not found!"));
+//        return hotel.getRooms();
+//    }
 
     public List<HotelDTO> getHotelsByAdminId(long hotelAdminId) {
         List<Hotel> hotels = hotelRepository.findByHotelAdminId(hotelAdminId);
@@ -222,27 +244,5 @@ public class HotelService {
 
     }
 
-
-
-//    private String saveImage(MultipartFile file, Hotel hotel) throws IOException {
-//        Path uploadPath = Paths.get(uploadDir + "/hotels");
-//        if (!Files.exists(uploadPath)) {
-//            Files.createDirectories(uploadPath);
-//        }
-//
-//        // Preserve original file extension
-//        String originalExtension = "";
-//        String originalName = file.getOriginalFilename();
-//        if (originalName != null && originalName.contains(".")) {
-//            originalExtension = originalName.substring(originalName.lastIndexOf("."));
-//        }
-//
-//        String fileName = hotel.getName() + "_" + UUID.randomUUID() + originalExtension;
-//
-//        Path filePath = uploadPath.resolve(fileName);
-//        Files.copy(file.getInputStream(), filePath);
-//
-//        return fileName;
-//    }
 
 }

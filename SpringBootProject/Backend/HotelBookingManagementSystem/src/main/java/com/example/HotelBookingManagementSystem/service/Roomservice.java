@@ -100,14 +100,14 @@ public class Roomservice {
         );
     }
 
-    public List<Room> findRoomByHotelName(String hotelName) {
+    public List<Room> findRoomByHotelId(String hotelName) {
         return roomRepository.findRoomByHotelName(hotelName);
     }
 
     public List<RoomDTO> getRoomsByHotelId(long hotelId) {
         List<Room> rooms = roomRepository.findByHotelId(hotelId);
         return rooms.stream()
-                .map(this::mapToDTO) // convertToDTO এর জায়গায় mapToDTO ব্যবহার করো
+                .map(this::mapToDTO)
                 .collect(Collectors.toList());
     }
 
@@ -214,6 +214,7 @@ public class Roomservice {
 
 
     }
+
 
 
 }

@@ -78,10 +78,10 @@ public class HotelRestController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Hotel> findHotelById(@PathVariable int id) {
+    public ResponseEntity<HotelDTO> findHotelById(@PathVariable long id) {
 
         try {
-            Hotel hotel = hotelService.findHotelById(id);
+            HotelDTO hotel = hotelService.getHotelById(id);
             return ResponseEntity.ok(hotel);
 
         } catch (RuntimeException e) {
@@ -110,11 +110,11 @@ public class HotelRestController {
         return ResponseEntity.ok(hotels);
     }
 
-    @GetMapping("/{id}/rooms")
-    public ResponseEntity<List<Room>> getRoomsByHotel(@PathVariable Long id) {
-        List<Room> rooms = hotelService.getRoomsByHotelId(id);
-        return ResponseEntity.ok(rooms);
-    }
+//    @GetMapping("/{id}/rooms")
+//    public ResponseEntity<List<Room>> getRoomsByHotel(@PathVariable Long id) {
+//        List<Room> rooms = hotelService.getRoomsByHotelId(id);
+//        return ResponseEntity.ok(rooms);
+//    }
 
     @GetMapping("/myHotels")
     public ResponseEntity<List<HotelDTO>> getMyHotels(Authentication authentication) {

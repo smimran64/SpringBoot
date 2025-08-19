@@ -12,14 +12,14 @@
 
     <div class="room-container" *ngIf="!loading && rooms.length > 0">
         <div class="room-card" *ngFor="let room of rooms">
-             <img [src]="'http://localhost:8082/images/rooms/' + room.image" class="card-img-top"
-          alt="{{ room.roomType }}" style="object-fit: cover; height: 180px;" />
+            <img [src]="'http://localhost:8082/images/rooms/' + room.image" class="card-img-top"
+                alt="{{ room.roomType }}" style="object-fit: cover; height: 180px;" />
             <h3>{{ room.roomType }}</h3>
-            <p><strong>Hotel:</strong> {{ room.hotelDTO.name }}</p>
-            <p><strong>Available:</strong> {{ room.availableRooms }}</p>
-            <p><strong>Booked:</strong> {{ room.bookedRooms }}</p>
-            <p><strong>Adults:</strong> {{ room.adults }} | <strong>Children:</strong> {{ room.children }}</p>
-            <p><strong>Price:</strong> {{ room.price }} BDT/night</p>
+            <p><strong>Hotel:</strong> {{ room.hotelDTO.name}}</p>
+            <p><strong>Available Rooms:</strong> {{ room.availableRooms }}</p>
+            <p><strong>Adults:</strong> {{ room.adults }} </p>
+            <p> <strong>Children:</strong> {{ room.children }}</p>
+            <p><strong>Price:</strong> {{ room.price }} </p>
         </div>
     </div>
 

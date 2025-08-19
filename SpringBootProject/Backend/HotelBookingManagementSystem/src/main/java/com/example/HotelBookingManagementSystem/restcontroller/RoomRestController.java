@@ -140,7 +140,7 @@ public class RoomRestController {
     @GetMapping("/r/searchRoom")
     public ResponseEntity<List<Room>> findRoomByHotelName(@RequestParam(value = "hotelName") String hotelName) {
 
-        List<Room> rooms = roomService.findRoomByHotelName(hotelName);
+        List<Room> rooms = roomService.findRoomByHotelId(hotelName);
         return ResponseEntity.ok(rooms);
     }
 
@@ -153,4 +153,6 @@ public class RoomRestController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Room not found");
         }
     }
+
+
 }

@@ -1,17 +1,17 @@
-<div *ngIf="customer" class="container py-5">
-  <div class="card p-4">
-    <div class="row align-items-center">
-      <div class="col-md-3 text-center">
-        <img [src]="'http://localhost:8085/images/customer/'+customer.image" alt="Profile Image" height="150" width="150" class="profile-img mb-3">
-        <h4 class="mb-0">{{ customer.name }}</h4>
-        <p class="text-muted">{{ customer.gender }}</p>
+<!-- customer-profile.component.html -->
+<div *ngIf="customer" class="profile-container">
+  <div class="profile-card">
+    <div class="profile-row">
+      <div class="profile-img-container">
+        <img [src]="'http://localhost:8082/images/customer/' + customer.image" alt="Profile Image" class="profile-img">
+        <h4 class="profile-name">{{ customer.name }}</h4>
+        <p class="profile-gender">{{ customer.gender }}</p>
       </div>
-      <div class="col-md-9">
-        <div class="row mb-2">
-          <div class="col-md-6"><strong>Email:</strong> {{ customer.email }}</div>
-          <div class="col-md-6"><strong>Phone:</strong> {{ customer.phone }}</div>
-          <div class="col-md-6"><strong>Address:</strong> {{ customer.address }}</div>
-          <div class="col-md-6"><strong>Date of Birth:</strong> </div>
+      <div class="profile-info-container">
+        <div class="profile-info">
+          <div><strong>Email:</strong> {{ customer.email }}</div>
+          <div><strong>Phone:</strong> {{ customer.phone }}</div>
+          <div><strong>Address:</strong> {{ customer.address }}</div>          
         </div>
       </div>
     </div>
