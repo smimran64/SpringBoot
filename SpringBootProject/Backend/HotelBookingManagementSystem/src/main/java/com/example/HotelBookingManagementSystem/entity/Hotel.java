@@ -1,5 +1,6 @@
 package com.example.HotelBookingManagementSystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -19,12 +20,12 @@ public class Hotel {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id")
-    @JsonManagedReference
+    @JsonBackReference
     private Location location;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_admin_id")
-    @JsonManagedReference
+    @JsonBackReference
     private HotelAdmin hotelAdmin;
 
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.ALL, orphanRemoval = true)

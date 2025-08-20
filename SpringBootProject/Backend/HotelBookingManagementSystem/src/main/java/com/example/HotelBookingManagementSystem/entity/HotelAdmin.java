@@ -1,6 +1,7 @@
 package com.example.HotelBookingManagementSystem.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.sql.Date;
@@ -30,6 +31,7 @@ public class HotelAdmin {
     private User user;
 
     @OneToMany(mappedBy = "hotelAdmin", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("hotel-hotelAdmin")
     private List<Hotel> hotels;
 
     public HotelAdmin() {

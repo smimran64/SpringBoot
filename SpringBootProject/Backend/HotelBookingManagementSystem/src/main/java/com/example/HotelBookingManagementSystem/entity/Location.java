@@ -1,5 +1,6 @@
 package com.example.HotelBookingManagementSystem.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class Location {
     private String name;
     private String image;
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Hotel> hotels;
 
 
