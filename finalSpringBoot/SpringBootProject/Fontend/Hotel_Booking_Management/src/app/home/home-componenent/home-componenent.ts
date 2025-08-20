@@ -55,11 +55,11 @@ export class HomeComponenent {
   }
 
   // navigate to hotel details
- viewHotel(hotelId: number) {
+  viewHotel(hotelId: number) {
     this.roomService.getRoomsByHotelId(hotelId).subscribe({
       next: (hotelData) => {
         this.selectedHotel = hotelData;
-        this.router.navigate([`/hotel-details/${environments.apiUrl+'/api/room/hotel/'}`,hotelId]);
+        this.router.navigate(['/hotel-details', hotelId]);
       },
       error: (err) => {
         console.error('Failed to fetch hotel details', err);
@@ -69,21 +69,21 @@ export class HomeComponenent {
   }
 
 
-  placeholder = 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1600&auto=format&fit=crop'; // বা লোকাল প্লেসহোল্ডার
+  placeholder = 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?q=80&w=1600&auto=format&fit=crop';
 
-getHotelImage(h: any): string {
-  // h.image যদি শুধু fileName হয়:
-  if (h?.image) {
-    // উদাহরণ: http://localhost:8082/images/hotels/ + fileName
-    return `${environments.apiUrl}/images/hotels/${h.image}`;
+  getHotelImage(h: any): string {
+
+    if (h?.image) {
+
+      return `${environments.apiUrl}/images/hotels/${h.image}`;
+    }
+    return this.placeholder;
   }
-  return this.placeholder;
-}
 
-imgFallback(ev: Event) {
-  const target = ev.target as HTMLImageElement;
-  target.src = this.placeholder;
-}
+  imgFallback(ev: Event) {
+    const target = ev.target as HTMLImageElement;
+    target.src = this.placeholder;
+  }
 
-trackById = (_: number, item: any) => item.id;
+  trackById = (_: number, item: any) => item.id;
 }

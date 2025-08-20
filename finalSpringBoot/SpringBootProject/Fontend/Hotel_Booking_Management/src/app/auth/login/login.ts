@@ -44,11 +44,11 @@ onSubmit(): void {
 
         // Role-based redirect
         if (role === 'CUSTOMER') {
-          this.router.navigate(['/customerProfile']);
+          this.router.navigate(['/home']);
         } else if (role === 'HOTEL_ADMIN') {
-          this.router.navigate(['/hoteladminProfile']);
+          this.router.navigate(['/addhotel']);
         } else if (role === 'ADMIN') {
-          this.router.navigate(['/adminProfile']);
+          this.router.navigate(['/addlocation']);
         } else {
           this.router.navigate(['/']); // fallback
         }

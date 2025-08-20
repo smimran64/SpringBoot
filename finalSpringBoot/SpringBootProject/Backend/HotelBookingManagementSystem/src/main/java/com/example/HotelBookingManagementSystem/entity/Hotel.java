@@ -33,6 +33,12 @@ public class Hotel {
     @JsonManagedReference(value = "hotel-bookings")
     private List<Booking> bookings;
 
+    @OneToOne(mappedBy = "hotel", cascade = CascadeType.ALL)
+    private HotelAmenities hotelAmenities;
+
+    @OneToOne(mappedBy = "hotel", cascade = CascadeType.ALL)
+    private HotelInformation hotelInformation;
+
 
 
     public Hotel() {

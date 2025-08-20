@@ -36,11 +36,14 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(req -> req
-                        .requestMatchers("/images/**","/api/customer/**","/api/customer/","/api/hotelAdmin/**","/api/hotel/all","/api/login","/api/room/all"
-                                ,"/api/active/**","/api/user/active/**","/api/location/save","/api/location/all","/api/hotel/searchByHotelAdminId","/api/admin/reg",
-                                "/api/location/delete/**", "/api/hoteladmin/reg", "/api/hoteladmin/profile","/api/admin/profile","/api/hotel/search","/api/hotel/{id}/rooms",
+                        .requestMatchers("/images/**","/api/customer/**","/api/customer/","/api/hotelAdmin/**",
+                                "/api/hotel/all","/api/login","/api/room/all"
+                                ,"/api/active/**","/api/user/active/**","/api/location/save","/api/location/all",
+                                "/api/hotel/searchByHotelAdminId","/api/admin/reg",
+                                "/api/location/delete/**", "/api/hoteladmin/reg", "/api/hoteladmin/profile",
+                                "/api/admin/profile","/api/hotel/search","/api/hotel/{id}/rooms",
                                 "/api/hotel/{id}").permitAll()
-                        .requestMatchers("/api/hotel/save","/api/room/save","/api/hotel/myHotels","/api/room/hotel/{hotelId}").hasRole("HOTEL_ADMIN")
+                        .requestMatchers("/api/hotel/save","/api/room/save","/api/hotel/myHotels","/api/room/hotel/**").hasRole("HOTEL_ADMIN")
 
                         .anyRequest().authenticated()
                 )
