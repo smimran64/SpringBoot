@@ -1,0 +1,126 @@
+/* Container */
+.amenities-container {
+    max-width: 750px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 5%;
+}
+
+/* Heading */
+.amenities-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Form Group */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* Select */
+select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: #fff;
+}
+
+/* Inline Amenities */
+.amenities-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.amenity-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: calc(50% - 10px);
+    /* 2 per row, adjust for gap */
+}
+
+/* Circle Radio Button */
+.amenity-item input[type="radio"] {
+    display: none;
+}
+
+.amenity-item .circle {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #0d6efd;
+    border-radius: 50%;
+    cursor: pointer;
+    position: relative;
+}
+
+.amenity-item input[type="radio"]:checked+.circle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 10px;
+    height: 10px;
+    background-color: #0d6efd;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Label Text */
+.amenity-label-text {
+    font-size: 14px;
+    color: #555;
+    white-space: nowrap;
+}
+
+/* Buttons */
+.button-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 8px 18px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+.save-btn {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.save-btn:hover {
+    background-color: #0b5ed7;
+}
+
+.reset-btn {
+    background-color: #6c757d;
+    color: white;
+}
+
+.reset-btn:hover {
+    background-color: #5c636a;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .amenity-item {
+        width: 100%;
+        /* Single column on mobile */
+    }
+}

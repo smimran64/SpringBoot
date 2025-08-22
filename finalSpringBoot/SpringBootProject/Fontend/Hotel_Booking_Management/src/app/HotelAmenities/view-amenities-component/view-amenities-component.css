@@ -1,0 +1,121 @@
+/* Container */
+.view-amenities-container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 6%;
+}
+
+.view-amenities-container h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+/* Cards Grid */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Single Card */
+.amenities-card {
+    background-color: #f8f9fa;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Hotel Name */
+.amenities-card h3 {
+    margin: 0;
+    color: #0d6efd;
+    font-size: 18px;
+    text-align: center;
+}
+
+/* Amenities Grid */
+.amenities-grid {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    /* max 2 per row */
+    gap: 10px 15px;
+    /* vertical and horizontal gap */
+}
+
+/* Single Amenity */
+.amenity-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+}
+
+/* Circle Indicator */
+.amenity-item .circle {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid #0d6efd;
+    display: inline-block;
+}
+
+.amenity-item .circle.active {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+/* Label Text */
+.amenity-label-text {
+    font-size: 14px;
+    color: #555;
+}
+
+/* Card Buttons */
+.card-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+}
+
+.btn {
+    padding: 6px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease-in-out;
+}
+
+.edit-btn {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.edit-btn:hover {
+    background-color: #0b5ed7;
+}
+
+.delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #b02a37;
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+    .amenities-grid {
+        grid-template-columns: 1fr;
+        /* single column on mobile */
+    }
+}

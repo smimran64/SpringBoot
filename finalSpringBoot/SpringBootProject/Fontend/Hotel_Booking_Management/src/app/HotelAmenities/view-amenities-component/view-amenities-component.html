@@ -1,0 +1,25 @@
+<div class="view-amenities-container">
+    <h2>Hotel Amenities</h2>
+
+    <div class="cards-container">
+        <div class="amenities-card" *ngFor="let amenity of amenitiesList">
+            <h3>{{ amenity.hotelName }}</h3>
+
+            <div class="amenities-grid">
+                <ng-container *ngFor="let option of amenitiesOptions">
+                    <ng-container *ngIf="amenity[option.key]">
+                        <div class="amenity-item">
+                            <span class="circle active"></span>
+                            <span class="amenity-label-text">{{ option.label }}</span>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+
+            <div class="card-buttons">
+                <button class="btn edit-btn" (click)="editAmenities(amenity)">Edit</button>
+                <button class="btn delete-btn" (click)="deleteAmenities(amenity.id)">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
